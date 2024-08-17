@@ -35,13 +35,13 @@ if __name__ == "__main__":
         lista_alunos.append("Aluno_" + str(i))
 
     print("\n \n")
-    print("\t --------------------------------------------")
-    print("\t ............................................")
-    print("\t ....... SISTEMA DE GESTÃO ACADÊMICA.........")
-    print("\t ............................................")
-    print("\t .............por: Gravatinha................")
-    print("\t ............................................")
-    print("\t --------------------------------------------")
+    print("\t --------------------------------------------------")
+    print("\t .                                                .")
+    print(f"\t .{'SISTEMA DE GESTÃO ACADÊMICA':^48}.")
+    print("\t .                                                .")
+    print(f"\t .{'por: Gravatinha':^48}.")
+    print("\t .                                                .")
+    print("\t --------------------------------------------------")
     print("\n \n")
 
     while True:  # Loop principal da aplicação. Roda enquanto não receber um BREAK
