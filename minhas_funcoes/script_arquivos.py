@@ -5,13 +5,12 @@
 #
 
 
-with open("minhas_funcoes\\base.json", "w", encoding="utf-8") as arquivo:
+with open("jason\\jason_teste.json", "w", encoding="utf-8") as arquivo:
     # comentario para explicar tudo
     arquivo.write("nesse eh  um arquivi")
     arquivo.write("\njason = {'nome':'nome1', 'cpf':'123'}")
 
-with open("minhas_funcoes\\base", "r", encoding="utf-8") as arquivo:
+with open("jason\\jason_teste.json", "r", encoding="utf-8") as arquivo:
     linhas = arquivo.readlines()
-
     for linha in linhas:
-        print("" + linha)
+        print(">> " + linha)
