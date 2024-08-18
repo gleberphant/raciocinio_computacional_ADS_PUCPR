@@ -1,20 +1,22 @@
-""" sitema de gestão academica - pucpr"""
+""" sitema de gestão academica - pucpr VS4"""
+# ┌─────────────────────────────────────────────────────────────┐
+# │         ╔════╗           ╔═════     ╔════╗  ╔═══╗           │
+# │         ║    ║  ║    ║   ║          ║    ║  ║   ║           │
+# │         ╠════╝  ║    ║   ║          ╠════╝  ╠═══╩╗          │
+# │         ║       ╚════╝   ╚═════     ║       ║    ║          │
+# └─────────────────────────────────────────────────────────────┘
+# ┌─────────────────────────────────────────────────────────────┐
+# │  CURSO: Análise e Desenvolvimento de Sistemas               │
+# │  DISCIPLINA: Raciocínio Computacional (11100010563_20242_02)│
+# │  ALUNO: HANDERSON GLEBER DE LIMA CAVALCANTI (Gr4v4t1nh4)    │
+# │  MATRÍCULA: 1112024201103                                   │
+# └─────────────────────────────────────────────────────────────┘
+# ┌─────────────────────────────────────────────────────────────┐
+# │   Atividade Somativa 1 - semana 4                           │
+# └─────────────────────────────────────────────────────────────┘
 
-# ██████  ██    ██  ██████     ██████  ██████
-# ██   ██ ██    ██ ██          ██   ██ ██   ██
-# ██████  ██    ██ ██          ██████  ██████
-# ██       ██████   ██████     ██      ██   ██
-
-# Curso: Análise e Desenvolvimento de Sistemas
-# Disciplina: Raciocínio Computacional (11100010563_20242_02)
-# Aluno: HANDERSON GLEBER DE LIMA CAVALCANTI (Gr4v4t1nh4)
-# MATRÍCULA 1112024201103
-#
-#
-# Atividade Somativa 1 - semana 4
-#
-
-# Desenvolva as funcionalidades de incluir e listar estudantes
+# CRITÉRIOS
+# - Desenvolva as funcionalidades de incluir e listar estudantes
 # - Apenas o nome do estudante deve ser perguntado ao usuário
 # - Os nomes dos estudantes devem ser armazenados em uma lista.
 # - Para a funcionalidade de listar, deve ser utilizada uma estrutura de repetição para percorrer a lista
@@ -29,53 +31,51 @@
 
 if __name__ == "__main__":
 
-    lista_alunos = [ ]
+    lista_alunos = []
 
     for i in range(5):  # popula o banco com dados de teste
         lista_alunos.append("Aluno_" + str(i))
 
-    print("\n \n")
-    print("\t --------------------------------------------------")
-    print("\t .                                                .")
-    print(f"\t .{'SISTEMA DE GESTÃO ACADÊMICA':^48}.")
-    print("\t .                                                .")
-    print(f"\t .{'por: Gravatinha':^48}.")
-    print("\t .                                                .")
-    print("\t --------------------------------------------------")
-    print("\n \n")
+    print("")
+    print(" ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░")
+    print(" ░░░░░░░░░░SISTEMA DE GESTÃO ACADÊMICA░░░░░░░░")
+    print(" ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░")
+    print(" ░░░░ por: HANDERSON GLEBER (gravatinha) ░░░░░")
+    print(" ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░")
+    print("")
 
     while True:  # Loop principal da aplicação. Roda enquanto não receber um BREAK
 
-        print("\t -------------- MENU PRINCIPAL --------------- ")
-        print("\t|                                             |")
-        print("\t| (1) Gerenciar Estudantes.                   |")
-        print("\t| (2) Gerenciar Professores.                  |")
-        print("\t| (3) Gerenciar Disciplinas.                  |")
-        print("\t| (4) Gerenciar Turmas.                       |")
-        print("\t| (5) Gerenciar Matrícula.                    |")
-        print("\t|                                             |")
-        print("\t| (9) Sair.                                   |")
-        print("\t|                                             |")
-        print("\t --------------------------------------------- ")
+        print("┌───────────────[ MENU PRINCIPAL ]──────────────┐")
+        print("│                                               │")
+        print("│ (1) Gerenciar Estudantes.                     │")
+        print("│ (2) Gerenciar Professores.                    │")
+        print("│ (3) Gerenciar Disciplinas.                    │")
+        print("│ (4) Gerenciar Turmas.                         │")
+        print("│ (5) Gerenciar Matrícula.                      │")
+        print("│                                               │")
+        print("│ (9) Sair.                                     │")
+        print("│                                               │")
+        print("└───────────────────────────────────────────────┘")
 
-        opcao_menu_principal = input("\t Informe o numero da opção desejada:  ")
+        opcao_menu_principal = input(" Informe o numero da opção desejada: ")
 
         if opcao_menu_principal == '1':  # ENTRA NO MENU DE ESTUDANTE
 
             while True:  # Loop no menu secundário. Roda enquanto não receber um BREAK
 
-                print("\t*************** MENU OPERAÇÕES ******************")
-                print("\t*                                               *")
-                print("\t* (1) Incluir.                                  *")
-                print("\t* (2) Listar.                                   *")
-                print("\t* (3) Atualizar.                                *")
-                print("\t* (4) Excluir.                                  *")
-                print("\t*                                               *")
-                print("\t* (9) Voltar                                    *")
-                print("\t*                                               *")
-                print("\t*************************************************")
+                print("┌──────────────[ MENU OPERAÇÕES ]───────────────┐")
+                print("│                                               │")
+                print("│ (1) Incluir.                                  │")
+                print("│ (2) Listar.                                   │")
+                print("│ (3) Atualizar.                                │")
+                print("│ (4) Excluir.                                  │")
+                print("│                                               │")
+                print("│ (9) Voltar                                    │")
+                print("│                                               │")
+                print("└───────────────────────────────────────────────┘")
 
-                opcao_submenu1 = input("\t Informe o número da opção desejada: ")
+                opcao_submenu1 = input(" Informe o número da opção desejada: ")
 
                 match opcao_submenu1:
                     case '1':  # Opção de incluir
@@ -83,70 +83,86 @@ if __name__ == "__main__":
                         lista_alunos.append(novo_aluno)
 
                     case '2':  # Opção de listar
-                        print("\t \t RELAÇÃO DOS ALUNOS CADASTRADOS")
-                        print("\t ___________________________________________")
+                        print("")
+                        print("┌───────────────────────────────────────────────┐")
+                        print("│        RELAÇÃO DOS ALUNOS CADASTRADOS         │")
                         if len(lista_alunos) > 0:
                             for i, aluno in enumerate(lista_alunos):
-                                print(f"\t |Num.: {0} - Nome:{1} ", i, aluno)
-                                print("\t -------------------")
-                            print("\t ____________________________________________")
+                                print("│                                               │")
+                                print(f"│ Cod. [{i:^5}]  -  Nome [ {aluno:<18} ]  │")
+                            print("│                                               │")
+                            print("└───────────────────────────────────────────────┘")
                         else:
-                            print("Não há estudantes cadastrados ")
+                            print("\t Não há estudantes cadastrados ")
 
                         input("\t pressione <ENTER> para continuar")
 
                     case '3':  # Opção de ATUALIZAR
                         try:
-                            codigo_atualizar = int(input("\n \t Digite o Codigo do aluno que deseja atualizar: "))
+                            codigo_atualizar = int(input("\n Digite o Codigo do aluno que deseja atualizar : "))
                         except ValueError:
-                            print("\n \t Valor inválido \n ")
+                            print("\t╔════════════════════╗")
+                            print("\t║   OPÇÃO INVÁLIDA   ║")
+                            print("\t╚════════════════════╝")
                         else:
                             if codigo_atualizar < len(lista_alunos):
-                                lista_alunos[codigo_atualizar] = input("\n Digite o novo nome: ").upper()
-                                print("\t item atualizado com sucesso")
+                                lista_alunos[codigo_atualizar] = input("\n\t Digite o novo nome : ").upper()
+                                print("\n\t *****  ITEM ATUALIZADO COM SUCESSO  ***** \n")
                             else:
-                                print("\n \t Valor inválido \n ")
+                                print("\t╔════════════════════╗")
+                                print("\t║   OPÇÃO INVÁLIDA   ║")
+                                print("\t╚════════════════════╝")
 
                         input("\t pressione <ENTER> para continuar")
                     case '4':  # Opção de EXCLUIR
                         try:
-                            codigo_remover = int(input("\n \t Digite o Codigo do aluno para remover: "))
+                            codigo_remover = int(input("\n Digite o Codigo do aluno para remover: "))
                         except ValueError:
-                            print("\n \t Valor inválido \n ")
+                            print("\t╔════════════════════╗")
+                            print("\t║   OPÇÃO INVÁLIDA   ║")
+                            print("\t╚════════════════════╝")
                         else:
                             if codigo_remover < len(lista_alunos):
-                                print("\t Voce tem certeza que deseja excluir ?")
-                                if input("\t Digite [S] para sim  ou [N] para não").upper() == "S":
+                                print("\t")
+                                print("\t╔══════════════════════════════════════════════════╗")
+                                print("\t║   Voce tem certeza que deseja excluir o item ?   ║")
+                                print("\t╚══════════════════════════════════════════════════╝")
+                                print("\t")
+                                if input("\t \t Digite [S] para SIM  ou [N] para NÃO ").upper() == "S":
                                     del lista_alunos[codigo_remover]
-                                    print("\t Exclusão com sucesso ")
+                                    print("\n *****  Exclusão realizada com sucesso ***** \n")
                                 else:
-                                    print("\t Exclusão cancelada")
+                                    print("\n *****  Exclusão cancelada  ***** \n")
                             else:
-                                print("\n \t Valor inválido \n ")
-                        input("\t pressione <ENTER> para continuar")
+                                print("\t╔════════════════════╗")
+                                print("\t║   OPÇÃO INVÁLIDA   ║")
+                                print("\t╚════════════════════╝")
+                        input(" pressione <ENTER> para continuar")
                     case '9':  # Opção de SAIR
-                        print("\t Voltando ao menu principal")
                         break
                     case _:  # CASO O USUÁRIO DIGITE OPÇÃO INVALIDA
-                        print("\n \t Opção inválida  \n ")
+                        print("\t╔════════════════════╗")
+                        print("\t║   OPÇÃO INVÁLIDA   ║")
+                        print("\t╚════════════════════╝")
 
-        elif (opcao_menu_principal == '2' or
-              opcao_menu_principal == '3' or
-              opcao_menu_principal == '4' or
-              opcao_menu_principal == '5'):  # OUTROS MODULOS DO MENU PRINCIPAL
+        elif (opcao_menu_principal == '2'
+              or opcao_menu_principal == '3'
+              or opcao_menu_principal == '4'
+              or opcao_menu_principal == '5'):  # OUTROS MODULOS DO MENU PRINCIPAL
 
-            print("\t **********************************************")
-            print("\t *** EM DESENVOLVIMENTO **** ")
-            print("\t **********************************************")
-            print("\t \n")
-            input("\t pressione ENTER para continuar")
+            print("")
+            print(" ╔════════════════════════════════════════════╗")
+            print(" ║            EM DESENVOLVIMENTO              ║")
+            print(" ╚════════════════════════════════════════════╝")
+            print("")
+            input(" pressione ENTER para continuar")
 
         elif opcao_menu_principal == '9' or opcao_menu_principal == 'q':  # OPÇÃO SAIR DO MENU PRINCIPAL
-            print("\t **********************************************")
-            print("\t*      Dúvidas e sugestões?                   *")
-            print("\t*      Entre em contato por                   *")
-            print("\t*      handerson.gleber@gmail.com             *")
-            print("\t***********************************************")
+            print(" ╔════════════════════════════════════════════╗")
+            print(" ║      Dúvidas e sugestões?                  ║")
+            print(" ║      Entre em contato por                  ║")
+            print(" ║      handerson.gleber@gmail.com            ║")
+            print(" ╚════════════════════════════════════════════╝")
             break
 
         else:  # CASO O USUÁRIO DIGITE OPÇÃO INVALIDA

@@ -1,20 +1,20 @@
-## ██████  ██    ██  ██████     ██████  ██████  
-# ██   ██ ██    ██ ██          ██   ██ ██   ██ 
-# ██████  ██    ██ ██          ██████  ██████  
-# ██       ██████   ██████     ██      ██   ██ 
+""" sitema de gestão academica - pucpr VS5"""
+# ┌─────────────────────────────────────────────────────────────┐
+# │         ╔════╗           ╔═════     ╔════╗  ╔═══╗           │
+# │         ║    ║  ║    ║   ║          ║    ║  ║   ║           │
+# │         ╠════╝  ║    ║   ║          ╠════╝  ╠═══╩╗          │
+# │         ║       ╚════╝   ╚═════     ║       ║    ║          │
+# └─────────────────────────────────────────────────────────────┘
+# ┌─────────────────────────────────────────────────────────────┐
+# │  CURSO: Análise e Desenvolvimento de Sistemas               │
+# │  DISCIPLINA: Raciocínio Computacional (11100010563_20242_02)│
+# │  ALUNO: HANDERSON GLEBER DE LIMA CAVALCANTI (Gr4v4t1nh4)    │
+# │  MATRÍCULA: 1112024201103                                   │
+# └─────────────────────────────────────────────────────────────┘
+# ┌─────────────────────────────────────────────────────────────┐
+# │   Atividade FORMATIVA 3 - semana 5                          │
+# └─────────────────────────────────────────────────────────────┘
 
-# Curso: Análise e Desenvolvimento de Sistemas
-# Disciplina: Raciocínio Computacional (11100010563_20242_02)
-# Aluno: HANDERSON GLEBER DE LIMA CAVALCANTI (Gr4v4t1nh4)
-# MATRÍCULA 1112024201103
-
-# Atividade Formativa nº 5
-#
-
-#
-
-
-# Esta funcao desenha a mensagem de abertura da aplicação. Coloquei em uma função para não poluir o código principal
 
 if __name__ == "__main__":
     # modelo de dicionario de aluno = {'código':'','nome':'','cpf':''}
@@ -23,24 +23,27 @@ if __name__ == "__main__":
     for i in range(5):
         lista_alunos.append({"codigo": 11 * i, "nome": "teste_" + str(i), "cpf": str(i) * 6})
 
-    print("\t ..............................................")
-    print("\t :..BEM VINDO AO SISTEMA DE GESTÃO ACADÊMICA..:")
-    print("\t :.......Desenvolvido por : Gravatinha........:")
-    print("\t ..............................................")
+    print("")
+    print(" ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░")
+    print(" ░░░░░░░░░░SISTEMA DE GESTÃO ACADÊMICA░░░░░░░░")
+    print(" ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░")
+    print(" ░░░░ por: HANDERSON GLEBER (gravatinha) ░░░░░")
+    print(" ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░")
+    print("")
 
     while True:  # Loop principal da aplicação. Roda enquanto não receber um BREAK
 
-        print("\t -------------- MENU PRINCIPAL --------------- ")
-        print("\t|                                             |")
-        print("\t| (1) Gerenciar Estudantes.                   |")
-        print("\t| (2) Gerenciar Professores.                  |")
-        print("\t| (3) Gerenciar Disciplinas.                  |")
-        print("\t| (4) Gerenciar Turmas.                       |")
-        print("\t| (5) Gerenciar Matrícula.                    |")
-        print("\t|                                             |")
-        print("\t| (9) Sair.                                   |")
-        print("\t|                                             |")
-        print("\t --------------------------------------------- ")
+        print("┌───────────────[ MENU PRINCIPAL ]──────────────┐")
+        print("│                                               │")
+        print("│ (1) Gerenciar Estudantes.                     │")
+        print("│ (2) Gerenciar Professores.                    │")
+        print("│ (3) Gerenciar Disciplinas.                    │")
+        print("│ (4) Gerenciar Turmas.                         │")
+        print("│ (5) Gerenciar Matrícula.                      │")
+        print("│                                               │")
+        print("│ (9) Sair.                                     │")
+        print("│                                               │")
+        print("└───────────────────────────────────────────────┘")
 
         opcao_menu_principal = input("\t Informe o numero da opção desejada:  ")[0]
 
@@ -48,16 +51,16 @@ if __name__ == "__main__":
 
             while True:  # Loop no menu secundário. Roda enquanto não receber um BREAK
 
-                print("\t*************** MENU OPERAÇÕES ******************")
-                print("\t*                                               *")
-                print("\t* (1) Incluir.                                  *")
-                print("\t* (2) Listar.                                   *")
-                print("\t* (3) Atualizar.                                *")
-                print("\t* (4) Excluir.                                  *")
-                print("\t*                                               *")
-                print("\t* (9) Voltar                                    *")
-                print("\t*                                               *")
-                print("\t*************************************************")
+                print("┌──────────────[ MENU OPERAÇÕES ]───────────────┐")
+                print("│                                               │")
+                print("│ (1) Incluir.                                  │")
+                print("│ (2) Listar.                                   │")
+                print("│ (3) Atualizar.                                │")
+                print("│ (4) Excluir.                                  │")
+                print("│                                               │")
+                print("│ (9) Voltar                                    │")
+                print("│                                               │")
+                print("└───────────────────────────────────────────────┘")
 
                 opcao_submenu1 = input("\t Informe o número da opção desejada: ")
 
@@ -69,14 +72,16 @@ if __name__ == "__main__":
                         lista_alunos.append(novo_aluno)
 
                     case '2':  # Opção de listar
-                        print("\t \t RELAÇÃO DOS ALUNOS CADASTRADOS")
-                        print("\t ___________________________________________")
+                        print("")
+                        print("┌───────────────────────────────────────────────┐")
+                        print("│           LISTAR ITENS CADASTRADOS            │")
                         for item in lista_alunos:
+                            print("│-----------------------------------------------│")
                             for k, v in item.items():
-                                print("\t |{}\t: {}  ".format(k, v))
-                            print("\t -------------------")
-                        print("\t ____________________________________________")
+                                print(f"│ {k:<15} : {v:<25}   │")
 
+                        print("│                                               │")
+                        print("└───────────────────────────────────────────────┘")
                         input("\t pressione <ENTER> para continuar")
 
                     case '3':  # Opção de ATUALIZAR
@@ -95,7 +100,9 @@ if __name__ == "__main__":
                             if not item_encontrado:
                                 print("\t aluno nao foi encontrado")
                         else:
-                            print("\n \t Valor inválido \n ")
+                            print("\t╔════════════════════╗")
+                            print("\t║   OPÇÃO INVÁLIDA   ║")
+                            print("\t╚════════════════════╝")
 
                         input("\t pressione <ENTER> para continuar")
 
@@ -118,34 +125,43 @@ if __name__ == "__main__":
                             if not item_encontrado:
                                 print("Nenhum item foi encontrado com esse codigo")
                         else:
-                            print("\n \t Valor inválido \n ")
+                            print("\t╔════════════════════╗")
+                            print("\t║   OPÇÃO INVÁLIDA   ║")
+                            print("\t╚════════════════════╝")
 
                         input("\t pressione <ENTER> para continuar")
 
                     case '9':  # Opção de SAIR
-                        print("\t Voltando ao menu principal")
                         break
 
                     case _:  # CASO O USUÁRIO DIGITE OPÇÃO INVALIDA
-                        print("\n \t Opção inválida  \n ")
+                        print("\t╔════════════════════╗")
+                        print("\t║   OPÇÃO INVÁLIDA   ║")
+                        print("\t╚════════════════════╝")
 
-        elif (opcao_menu_principal == '2' or
-              opcao_menu_principal == '3' or
-              opcao_menu_principal == '4' or
-              opcao_menu_principal == '5'):  # OUTROS MODULOS DO MENU PRINCIPAL
+        elif (opcao_menu_principal == '2'
+              or opcao_menu_principal == '3'
+              or opcao_menu_principal == '4'
+              or opcao_menu_principal == '5'):  # OUTROS MODULOS DO MENU PRINCIPAL
 
-            print("\t *** EM DESENVOLVIMENTO **** ")
-            input("\t pressione ENTER para continuar")
+            print("")
+            print(" ╔════════════════════════════════════════════╗")
+            print(" ║            EM DESENVOLVIMENTO              ║")
+            print(" ╚════════════════════════════════════════════╝")
+            print("")
+            input(" pressione ENTER para continuar")
 
         elif opcao_menu_principal == '9' or opcao_menu_principal == 'q':  # OPÇÃO SAIR DO MENU PRINCIPAL
-            print("\t **********************************************")
-            print("\t*      Dúvidas e sugestões?                   *")
-            print("\t*      Entre em contato por                   *")
-            print("\t*      handerson.gleber@gmail.com             *")
-            print("\t***********************************************")
+            print(" ╔════════════════════════════════════════════╗")
+            print(" ║      Dúvidas e sugestões?                  ║")
+            print(" ║      Entre em contato por                  ║")
+            print(" ║      handerson.gleber@gmail.com            ║")
+            print(" ╚════════════════════════════════════════════╝")
             break
 
         else:  # CASO O USUÁRIO DIGITE OPÇÃO INVALIDA
-            print("\n \t Opção inválida \n ")
+            print("\t╔════════════════════╗")
+            print("\t║   OPÇÃO INVÁLIDA   ║")
+            print("\t╚════════════════════╝")
 
     exit(0)
