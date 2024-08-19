@@ -93,7 +93,7 @@ def msg_enter_continua():
 
 def popula_dados_teste():
     lista = []
-    for i in range(8):
+    for i in range(5):
         lista.append({"codigo": 1 * i, "nome": "aluno_" + str(i), "cpf": str(i) * 6})
     return lista
 
@@ -106,17 +106,27 @@ def inserir_item(novo_item, lista_param):
     return lista_param
 
 
-def listar_itens(lista_param):
+def listar_itens(lista_param, nome="ITENS"):
     print("")
     print("┌───────────────────────────────────────────────┐")
-    print("│           LISTAR ITENS CADASTRADOS            │")
-    for item in lista_param:
-        print("│-----------------------------------------------│")
-        for k, v in item.items():
-            print(f"│ {k:<15} : {v:<25}   │")
-
+    print("│            LISTAR {0:<11}                 │".format(nome))
     print("│                                               │")
-    print("└───────────────────────────────────────────────┘")
+    if len(lista_param) > 0:
+        k = list(lista_param[0].keys())
+
+        print("├────────┬─────────────────────────┬────────────┤")
+        print(f"│ {k[0]:<6} │ {k[1]:<23} │ {k[2]:<11}│")  # desenha o keys da tabela
+
+        for item in lista_param:  # desenha cada linha da tabela
+            print("├────────┼─────────────────────────┼────────────┤")
+            print(f"│ {item[k[0]]:<6} │ {item[k[1]]:<23} │ {item[k[2]]:<11}│")
+        print("└────────┴─────────────────────────┴────────────┘")
+        print("")
+    else:
+        print("│                                               │")
+        print("│        *** Não há item cadastrado ***         │")
+        print("│                                               │")
+        print("└───────────────────────────────────────────────┘")
     return None
 
 

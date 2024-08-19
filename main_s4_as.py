@@ -15,7 +15,7 @@
 # │   Atividade Somativa 1 - semana 4                           │
 # └─────────────────────────────────────────────────────────────┘
 
-# CRITÉRIOS
+# O que devo desenvolver?
 # - Desenvolva as funcionalidades de incluir e listar estudantes
 # - Apenas o nome do estudante deve ser perguntado ao usuário
 # - Os nomes dos estudantes devem ser armazenados em uma lista.
@@ -33,8 +33,8 @@ if __name__ == "__main__":
 
     lista_alunos = []
 
-    for i in range(5):  # popula o banco com dados de teste
-        lista_alunos.append("Aluno_" + str(i))
+    # for i in range(2):  # popula o banco com dados de teste
+    #     lista_alunos.append("Aluno_" + str(i))
 
     print("")
     print(" ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░")
@@ -68,7 +68,7 @@ if __name__ == "__main__":
                 print("│                                               │")
                 print("│ (1) Incluir.                                  │")
                 print("│ (2) Listar.                                   │")
-                print("│ (3) Atualizar.                                │")
+                print("│ (3) Editar.                                   │")
                 print("│ (4) Excluir.                                  │")
                 print("│                                               │")
                 print("│ (9) Voltar                                    │")
@@ -86,14 +86,21 @@ if __name__ == "__main__":
                         print("")
                         print("┌───────────────────────────────────────────────┐")
                         print("│        RELAÇÃO DOS ALUNOS CADASTRADOS         │")
+                        print("│                                               │")
+
                         if len(lista_alunos) > 0:
+                            print("├────────┬──────────────────────────────────────┤")
+                            print("│ Codigo │ Nom                                  │")
                             for i, aluno in enumerate(lista_alunos):
-                                print("│                                               │")
-                                print(f"│ Cod. [{i:^5}]  -  Nome [ {aluno:<18} ]  │")
+                                print("├────────┼──────────────────────────────────────┤")
+                                print(f"│ {i:^6} │ {aluno:<36} │")
+
+                            print("└────────┴──────────────────────────────────────┘")
+                        else:
+                            print("│                                               │")
+                            print("│       *** Não há aluno cadastrado ***         │")
                             print("│                                               │")
                             print("└───────────────────────────────────────────────┘")
-                        else:
-                            print("\t Não há estudantes cadastrados ")
 
                         input("\t pressione <ENTER> para continuar")
 

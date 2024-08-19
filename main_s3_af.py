@@ -14,7 +14,12 @@
 # ┌─────────────────────────────────────────────────────────────┐
 # │   Atividade FORMATIVA 2 - semana 3                          │
 # └─────────────────────────────────────────────────────────────┘
-#
+# O que devo desenvolver?
+# - Utilizar estruturas de repetição (como for e while) para que o usuário navegue entre o menu principal (que mostra as opções cadastrais) e o menu de operações (que mostra as operações de incluir, listar, atualizar, excluir e voltar ao menu principal).
+# - Ao selecionar uma opção no menu principal, deve ser apresentada a opção selecionada pelo usuário, e após isso, deverá aparecer o menu de operações.
+# - Ao selecionar uma opção no menu de operações, deve ser apresentada a opção selecionada pelo usuário, e o menu de operações deve ser apresentado novamente, até que o usuário selecione a opção “Voltar ao menu principal”. Neste caso, o menu principal deve voltar a ser apresentado.
+# - O sistema deve ser encerrado apenas se o usuário selecionar a opção “Sair” no menu principal.
+
 if __name__ == "__main__":
 
     # Mensagem de boas vindas

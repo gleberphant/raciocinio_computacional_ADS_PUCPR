@@ -12,16 +12,20 @@
 # │  MATRÍCULA: 1112024201103                                   │
 # └─────────────────────────────────────────────────────────────┘
 # ┌─────────────────────────────────────────────────────────────┐
-# │   Atividade FORMATIVA 4 - semana 6                          │
+# │   Atividade FORMATIVA 5 - semana 7                          │
 # └─────────────────────────────────────────────────────────────┘
 # CRITÉRIOS
-# -	Você deve obrigatoriamente modularizar (colocar dentro de funções) as seguintes funcionalidades:
-# -	Apresentação do Menu Principal
-# -	Apresentação do Menu de Operações
-# -	Inclusão de estudante
-# -	Listagem de estudantes
-# - Edição de estudante
-# -	Exclusão de estudante
+# -	Função para salvar lista de estudantes em um arquivo JSON.
+# -	Função para recuperar lista de estudantes de um arquivo JSON e armazenar em uma variável em memória.
+# -	Adaptação das funções de incluir, listar, excluir e editar estudantes para que acessem as duas funções acima sempre
+# que necessário.
+import json
+
+
+def salvar_em_arquivo(dados_param, nome_param="itens"):
+    with open(nome_param + ".json", "w", encoding='utf8') as arquivo_escrita:
+        json.dump(dados_param, arquivo_escrita, ensure_ascii=False)
+    return True
 
 
 #  Esta funcao desenha o menu principal da aplicação. Coloquei em uma função para não poluir o código principal
@@ -106,17 +110,27 @@ def inserir_item(novo_item, lista_param):
     return lista_param
 
 
-def listar_itens(lista_param):
+def listar_itens(lista_param, nome="ITENS"):
     print("")
     print("┌───────────────────────────────────────────────┐")
-    print("│           LISTAR ITENS CADASTRADOS            │")
-    for item in lista_param:
-        print("│-----------------------------------------------│")
-        for k, v in item.items():
-            print(f"│ {k:<15} : {v:<25}   │")
-
+    print("│            LISTAR {0:<11}                 │".format(nome))
     print("│                                               │")
-    print("└───────────────────────────────────────────────┘")
+    if len(lista_param) > 0:
+        k = list(lista_param[0].keys())
+
+        print("├────────┬─────────────────────────┬────────────┤")
+        print(f"│ {k[0]:<6} │ {k[1]:<23} │ {k[2]:<11}│")  # desenha o keys da tabela
+
+        for item in lista_param:  # desenha cada linha da tabela
+            print("├────────┼─────────────────────────┼────────────┤")
+            print(f"│ {item[k[0]]:<6} │ {item[k[1]]:<23} │ {item[k[2]]:<11}│")
+        print("└────────┴─────────────────────────┴────────────┘")
+        print("")
+    else:
+        print("│                                               │")
+        print("│        *** Não há item cadastrado ***         │")
+        print("│                                               │")
+        print("└───────────────────────────────────────────────┘")
     return None
 
 

@@ -14,7 +14,15 @@
 # ┌─────────────────────────────────────────────────────────────┐
 # │   Atividade FORMATIVA 3 - semana 5                          │
 # └─────────────────────────────────────────────────────────────┘
-
+#
+# O que devo desenvolver?
+# - Ao incluir, listar ou editar um estudante, as seguintes informações devem ser utilizadas:
+# - ódigo do estudante (Número inteiro).
+# - Nome do estudante (String).
+# - CPF do estudante (String).
+# - Os dados do estudante devem ser armazenados em um dicionário ou tupla, que por sua vez, devem ser adicionados à uma lista.
+# - Desenvolver a funcionalidade de excluir um estudante, onde deve ser perguntado ao usuário qual o código do estudante que ele deseja excluir, para então remover o estudante correspondente da lista. Lembre-se que você deve percorrer a lista e encontrar uma tupla ou dicionário que contenha o código igual ao informado, e então excluir esta estrutura da lista.
+# - Desenvolver a funcionalidade de editar um estudante, onde deve ser perguntado ao usuário o código do estudante que se deseja editar, e então realizar a entrada dos dados correspondentes a todos dados do estudante (código, nome e cpf). Após isso, estes dados devem ser atualizados no dicionário ou tupla correspondente dentro da lista de estudantes.
 
 if __name__ == "__main__":
     # modelo de dicionario de aluno = {'código':'','nome':'','cpf':''}
@@ -74,14 +82,22 @@ if __name__ == "__main__":
                     case '2':  # Opção de listar
                         print("")
                         print("┌───────────────────────────────────────────────┐")
-                        print("│           LISTAR ITENS CADASTRADOS            │")
-                        for item in lista_alunos:
-                            print("│-----------------------------------------------│")
-                            for k, v in item.items():
-                                print(f"│ {k:<15} : {v:<25}   │")
-
+                        print("│           LISTAR ALUNOS CADASTRADOS           │")
                         print("│                                               │")
-                        print("└───────────────────────────────────────────────┘")
+
+                        if len(lista_alunos) > 0:
+                            print("├────────┬─────────────────────────┬────────────┤")
+                            print("│ COD    │ NOME                    │ CPF        │")
+                            for aluno in lista_alunos:
+                                print("├────────┼─────────────────────────┼────────────┤")
+                                print(f"│ {aluno['codigo']:<6} │ {aluno['nome']:<23} │ {aluno['cpf']:<11}│")
+                            print("└────────┴─────────────────────────┴────────────┘")
+                        else:
+                            print("│                                               │")
+                            print("│       *** Não há aluno cadastrado ***         │")
+                            print("│                                               │")
+                            print("└───────────────────────────────────────────────┘")
+
                         input("\t pressione <ENTER> para continuar")
 
                     case '3':  # Opção de ATUALIZAR
