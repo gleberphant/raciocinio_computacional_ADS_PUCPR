@@ -5,7 +5,10 @@
 #
 #
 
-import json
+import pickle
+
+
+ARQUIVO_PATH = "minhas_funcoes\\dados.data"
 
 dados = {
     "nome": "joão",
@@ -18,18 +21,35 @@ dados = {
     ]
 }
 
+lista_de_dados = [dados] * 3
 
-with open("pessoa.json", "w", encoding="utf-8") as arquivo_escrita:
-    json.dump(dados, arquivo_escrita, ensure_ascii=False)
+with open(ARQUIVO_PATH, "wb") as file1:
+    pickle.dump(lista_de_dados, file1)
 
-with open("pessoa.json", "r", encoding="utf-8") as arquivo_leitura:
-    dados_lidos = json.load(arquivo_leitura)
 
-for k, v in dados_lidos.items():
-    print(f"│ {str(k):<20} : {str(v):<25}   │")
-# tupla = ("elemento1",
-#          "elemento2",
-#          "elemento3")
+with open(ARQUIVO_PATH, "rb") as file2:
+    resultado = pickle.load(file2)
+
+for objeto in resultado:
+    print("objeto ", type(objeto))
+    for k, v in objeto.items():
+        print("| Key: ", k, end=': ')
+        if isinstance(v, list):
+            print("", end='')
+            for vv in v:
+                print(vv, end=' ')
+        else:
+            print("", v, end='')
+        print("")
+
+# with open("pessoa.json", "r", encoding="utf-8") as arquivo_leitura:
+#     dados_lidos = json.load(arquivo_leitura)
+
+# for k, v in dados_lidos.items():
+#     print(f"│ {str(k):<20} : {str(v):<25}   │")
+# # tupla = ("elemento1",
+# #          "elemento2",
+# #          "elemento3")
 #
 # dicionario = {"cod": "001",
 #               "nome": "teste01"}
