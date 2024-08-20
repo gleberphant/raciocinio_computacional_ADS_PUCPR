@@ -46,7 +46,7 @@ def abrir_arquivo(nome_base_destino_param="itens"):
     try:
         with open("jayzon_" + nome_base_destino_param + ".json", "r", encoding='utf8') as jayzon_leitura:
             data_return = json.load(jayzon_leitura)
-    except:
+    except Exception:
         print("***** Erro na leitura do arquivo **** ")
         print("Carregando dados de teste .... ")
         data_return = popula_dados_teste()

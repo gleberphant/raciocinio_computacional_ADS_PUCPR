@@ -15,10 +15,34 @@
 # │   Atividade FORMATIVA 5 - semana 7                          │
 # └─────────────────────────────────────────────────────────────┘
 # CRITÉRIOS
-# -	Função para salvar lista de estudantes em um arquivo JSON.
-# -	Função para recuperar lista de estudantes de um arquivo JSON e armazenar em uma variável em memória.
-# -	Adaptação das funções de incluir, listar, excluir e editar estudantes para que acessem as duas funções acima sempre
-# que necessário.
+# -O que devo desenvolver?
+# - Implementar todas as funcionalidades já desenvolvidas (ex.: incluir e listar) para os demais módulos do sistema. Veja os dados necessários para cada um dos grupos abaixo:
+# - Professores
+# - Código do professor (Número inteiro)
+# - Nome do professor (String)
+# - CPF do professor (String)
+# - Disciplinas
+# - Código da disciplina (Número inteiro)
+# - Nome da disciplina (String)
+# - Turmas
+# - Código da turma (Número inteiro)
+# - Código do professor (Número inteiro)
+# - Código da disciplina (Número inteiro)
+# - Matrículas
+# - Código da turma (Número inteiro)
+# - Código do estudante (Número inteiro)
+# • Validação de dados na manipulação de turmas e matrículas (verificar se um código já existe antes de incluir uma nova turma/matrícula com o mesmo código).
+# - O que meu sistema deve ter no final? (checklist)
+# - As quatro operações básicas (incluir/listar/atualizar/excluir) para todos os módulos (estudantes/professores/disciplinas/turmas/matrículas) do sistema.
+# - Utilização de estruturas condicionais (if/elif/else) no código.
+# - Utilização de estruturas de repetição (for ou while) para navegação dos menus
+# - Utilização de estruturas de dados compostas (listas, dicionários, e/ou tuplas) para organização dos dados.
+# - Utilização de arquivos para a persistência dos dados cadastrados.
+# - Utilização de funções para modularizar as principais funcionalidades da aplicação.
+# -o As funções devem ser utilizadas seguindo boas práticas de programação.
+# -o Se possível, reaproveitar funções para diferentes módulos do sistema (ex.: uma única função para incluir registro de estudantes, professores, disciplinas, turmas e matrículas).
+# - Validações de dados e controle de possíveis exceções/erros de execução (try/except).
+
 import json
 
 # função para salvar dados em um arquivo jayzon
@@ -46,7 +70,7 @@ def abrir_arquivo(nome_base_destino_param="itens"):
     try:
         with open("jayzon_" + nome_base_destino_param + ".json", "r", encoding='utf8') as jayzon_leitura:
             data_return = json.load(jayzon_leitura)
-    except:
+    except Exception:
         print("***** Erro na leitura do arquivo **** ")
         print("Carregando dados de teste .... ")
         data_return = popula_dados_teste()
