@@ -38,23 +38,23 @@ if __name__ == "__main__":
         print("│ (2) Gerenciar Professores.                    │")
         print("│ (3) Gerenciar Disciplinas.                    │")
         print("│ (4) Gerenciar Turmas.                         │")
-        print("│ (5) Gerenciar Matrícula.                      │")
+        print("│ (5) Gerenciar Matrículas.                      │")
         print("│                                               │")
         print("│ (9) Sair.                                     │")
         print("│                                               │")
         print("└───────────────────────────────────────────────┘")
         opcao_menu_principal = input("\t Informe o numero da opção desejada:  ")
 
-        # condicional de menus secundarios|
+        # condicional de menus secundários|
         if opcao_menu_principal == "1" or opcao_menu_principal == "2" or opcao_menu_principal == "3" or opcao_menu_principal == "4" or opcao_menu_principal == "5":
 
-            # loop secundario
+            # loop secundário
             while True:
                 print("┌──────────────[ MENU OPERAÇÕES ]───────────────┐")
                 print("│                                               │")
                 print("│ (1) Incluir.                                  │")
                 print("│ (2) Listar.                                   │")
-                print("│ (3) Atualizar.                                │")
+                print("│ (3) Editar.                                   │")
                 print("│ (4) Excluir.                                  │")
                 print("│                                               │")
                 print("│ (9) Voltar                                    │")
@@ -62,7 +62,7 @@ if __name__ == "__main__":
                 print("└───────────────────────────────────────────────┘")
                 opcao_submenu1 = input("\t Informe o número da opção desejada: ")
 
-                # opcoes dos menu secundario
+                # condicional do menu secundário
                 if opcao_submenu1 == "1" or opcao_submenu1 == "2" or opcao_submenu1 == "3" or opcao_submenu1 == "4":
                     print("")
                     print(" ╔════════════════════════════════════════════╗")
@@ -71,18 +71,18 @@ if __name__ == "__main__":
                     print("")
 
                     input(" pressione ENTER para continuar")
-                # opcao sair menu secundário
+                # opção sair do menu secundário
                 elif opcao_submenu1 == "9":
                     print("Voltando ao menu principal")
                     break
 
-                # opcao invalida
+                # opção inválida do menu secundário
                 else:
                     print("\t ---  OPÇÃO INVÁLIDA  --- \n")
                     input("\t\t pressione <ENTER> para continua")
                     break
 
-        # opcao sair menu principal
+        # opção sair do menu principal
         elif opcao_menu_principal == "9":
             print(" ╔════════════════════════════════════════════╗")
             print(" ║      Dúvidas e sugestões?                  ║")
@@ -91,7 +91,7 @@ if __name__ == "__main__":
             print(" ╚════════════════════════════════════════════╝")
             break
 
-        # opcao invalida menu principal
+        # opção inválida do menu principal
         else:
             print("\t ---  OPÇÃO INVÁLIDA  --- \n")
             input("\t\t pressione <ENTER> para continua")
