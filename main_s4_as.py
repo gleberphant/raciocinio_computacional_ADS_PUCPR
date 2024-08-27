@@ -1,4 +1,4 @@
-""" sitema de gestão academica - pucpr VS4"""
+""" Sistema de gestão academica - pucpr S4"""
 # ┌─────────────────────────────────────────────────────────────┐
 # │         ╔════╗           ╔═════     ╔════╗  ╔═══╗           │
 # │         ║    ║  ║    ║   ║          ║    ║  ║   ║           │
@@ -61,7 +61,7 @@ if __name__ == "__main__":
         print("│                                               │")
         print("└───────────────────────────────────────────────┘")
 
-        opcao_menu_principal = input(" Informe o numero da opção desejada: ")
+        opcao_menu_principal = input(" Informe o número da opção desejada: ")
 
         if opcao_menu_principal == '1':  # ENTRA NO MENU DE ESTUDANTE
 
@@ -74,7 +74,7 @@ if __name__ == "__main__":
                 print("│ (3) Editar.                                   │")
                 print("│ (4) Excluir.                                  │")
                 print("│                                               │")
-                print("│ (9) Voltar                                    │")
+                print("│ (9) Voltar.                                   │")
                 print("│                                               │")
                 print("└───────────────────────────────────────────────┘")
 
@@ -82,7 +82,7 @@ if __name__ == "__main__":
 
                 match opcao_submenu:
                     case '1':  # Opção de incluir
-                        novo_aluno = input("\t Informe o NOME a ser inserido:  ")
+                        novo_aluno = input("\t Informe o NOME do aluno a ser inserido:  ")
                         lista_alunos.append((str(gerador_codigo), novo_aluno))
                         gerador_codigo += 1
 
@@ -94,7 +94,7 @@ if __name__ == "__main__":
 
                         if len(lista_alunos) > 0:
                             print("├────────┬──────────────────────────────────────┤")
-                            print("│ Codigo │ Nom                                  │")
+                            print("│ Código │ Nome                                 │")
                             for aluno in lista_alunos:
                                 print("├────────┼──────────────────────────────────────┤")
                                 print(f"│ {aluno[0]:^6} │ {aluno[1]:<36} │")
@@ -109,78 +109,93 @@ if __name__ == "__main__":
                         input("\t pressione <ENTER> para continuar")
 
                     case '3':  # Opção de EDITAR
-
+                        # inicia as variáveis de controle
                         codigo_editar = ' '
                         aluno_encontrado = False
 
+                        # filtro de entrada - laço obriga usuário digitar um número
                         while True:
-                            codigo_editar = input("\n Digite o Codigo do aluno que deseja atualizar : ")
+                            codigo_editar = input("\n Digite o código do aluno que deseja editar : ")
                             if codigo_editar.isdigit():
                                 break
                             else:
-                                print("*** Valor inválido. **** ")
+                                print("*** código inválido. **** ")
+                                print("*** digite um código númérico. **** ")
 
+                        # laço para procurar o aluno informado
                         for i, aluno in enumerate(lista_alunos):
-                            if aluno[0] == codigo_editar:
-                                aluno_encontrado = True
-                                novo_nome = input("\n\t Digite o novo nome : ")
-                                lista_alunos[i] = (codigo_editar, novo_nome)
-                                print(f"\n\t *****  ALUNO COD {aluno[0]:<4} ATUALIZADO COM SUCESSO  ***** \n")
-                                break  # quebra o laço for de busca do aluno
 
+                            # aluno encontrado
+                            if aluno[0] == codigo_editar:
+
+                                aluno_encontrado = True
+                                novo_nome = input("\n\t Digite o novo nome do aluno: ")
+
+                                try:  # tenta atualizar o aluno
+                                    lista_alunos[i] = (codigo_editar, novo_nome)
+                                except Exception as erro:  # se ocorrer um erro
+                                    print(" *** ocorreu um erro quando estava atualizando o aluno **** \n Erro = ", erro)
+                                else:  # se funcionar
+                                    print("\t╔═══════════════════════════════════════════╗")
+                                    print(f"\t║ *** ALUNO {codigo_editar:<4} ATUALIZADO COM SUCESSO *** ║")
+                                    print("\t╚═══════════════════════════════════════════╝")
+                                finally:  # em qualquer caso quebra o laço de busca
+                                    break
+
+                        # caso o aluno não seja encontrado
                         if not aluno_encontrado:
                             print("\t╔══════════════════════════╗")
                             print("\t║   aluno não encontrado   ║")
                             print("\t╚══════════════════════════╝")
 
+                        # final da opção
                         input("\t pressione <ENTER> para continuar")
 
                     case '4':  # Opção de EXCLUIR
-
+                        # inicia as variáveis de controle locais
                         codigo_remover = ' '
                         aluno_encontrado = False
 
-                        # Verificar se o codigo informado é numerico
+                        # filtro de entrada - laço obriga usuário digitar um número
                         while True:
                             codigo_remover = input("\n Digite o Codigo do aluno para remover: ")
 
                             if codigo_remover.isdigit():
                                 break
                             else:
-                                print("\t╔════════════════════╗")
-                                print("\t║   OPÇÃO INVÁLIDA   ║")
-                                print("\t╚════════════════════╝")
+                                print("*** código inválido. **** ")
+                                print("*** Digite um código númérico. **** ")
 
-                        # procurar o aluno na lista de alunos
+                        # laço para procurar o aluno informado
                         for i, aluno in enumerate(lista_alunos):
-                            # aluno encontrado
 
+                            # aluno encontrado
                             if aluno[0] == codigo_remover:
 
                                 aluno_encontrado = True
 
-                                # loop de confirmação
+                                # loop de confirmação de exclusão
                                 while True:
-                                    print("\t╔════════════════════════════════════════════════════════════════╗")
-                                    print(f"\t║   Voce tem certeza que deseja excluir {aluno[1]:^20} ?   ║")
-                                    print("\t╚════════════════════════════════════════════════════════════════╝")
+                                    print("\t╔════════════════════════════════════════════════════════════╗")
+                                    print(f"\t║    tem certeza que deseja excluir {aluno[1]:^20} ?   ║")
+                                    print("\t╚════════════════════════════════════════════════════════════╝")
                                     confirmacao = input("\t Digite [S] para SIM  ou [N] para NÃO ").upper()
 
                                     # Resposta SIM - deletar o aluno
                                     if confirmacao == "S":
                                         try:
                                             del lista_alunos[i]
-                                        except Exception:
-                                            print("*** falha na exclusao ***")
+                                        except Exception as erro:
+                                            print("*** falha na exclusao *** \n Erro :", erro)
                                         else:
-                                            print("\t╔═════════════════════════════════════════════════╗")
-                                            print("\t║ *****  ALUNO COD {codigo_remover:<4} EXCLUIDO COM SUCESSO  ***** ║")
-                                            print("\t╚═════════════════════════════════════════════════╝")
+                                            print("\t╔═══════════════════════════════════════════╗")
+                                            print(f"\t║ **** ALUNO {codigo_remover:<4} EXCLUIDO COM SUCESSO **** ║")
+                                            print("\t╚═══════════════════════════════════════════╝")
 
                                         finally:
                                             break  # quebra o laço while de confirmação da exclusão
 
-                                    # resposta NAO - cancelar exclusão
+                                    # resposta NÃO - cancelar exclusão
                                     elif confirmacao == "N":
                                         print("\t╔════════════════════════╗")
                                         print("\t║   EXCLUSÃO CANCELADA   ║")
