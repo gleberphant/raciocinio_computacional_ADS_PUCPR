@@ -251,4 +251,4 @@ if __name__ == "__main__":
         else:  # CASO O USUÁRIO DIGITE OPÇÃO INVALIDA
             print("\n \t Opção inválida \n ")
 
-    exit(0)
+    exit()
