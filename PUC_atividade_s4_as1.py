@@ -35,9 +35,10 @@ if __name__ == "__main__":
     lista_alunos = []
     gerador_codigo = 0
 
-    for i in range(5):  # popula o banco com dados de teste
-        lista_alunos.append((str(gerador_codigo), "Aluno_" + str(i)))
-        gerador_codigo += 11
+    # código para popular o banco com dados de teste
+    # for i in range(5):
+    #     lista_alunos.append((str(gerador_codigo), "Aluno_" + str(i)))
+    #     gerador_codigo += 1
 
     print("")
     print(" ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░")
