@@ -1,0 +1,13 @@
+# Ignorar arquivos de compilação
+*.log
+*.pyc
+*.class
+
+# Ignorar diretórios de ambiente virtual
+venv/
+env/
+.venv/
+.vscode/
+.idea/
+
+/jayzon_itens.json

@@ -1,4 +1,4 @@
-""" sitema de gestão academica - pucpr VS6"""
+""" Sistema de gestão academica - pucpr VS6"""
 # ┌─────────────────────────────────────────────────────────────┐
 # │         ╔════╗           ╔═════     ╔════╗  ╔═══╗           │
 # │         ║    ║  ║    ║   ║          ║    ║  ║   ║           │
@@ -19,24 +19,19 @@
 # -	Função para recuperar lista de estudantes de um arquivo JSON e armazenar em uma variável em memória.
 # -	Adaptação das funções de incluir, listar, excluir e editar estudantes para que acessem as duas funções acima sempre
 # que necessário.
+
+# importações de bibliotecas utilizadas
 import json
 import os
 
 
 # Função para salvar dados em um arquivo json
-# recebe o dicionário com os dados e um nome da base destino.
-# Retorna true se tudo certo.
 
-
-def limpar_tela():
-    if os.name == 'nt':
-        os.system('cls')
-    else:
-        os.system('clear')
-
-
-def salvar_em_arquivo(dados_param, nome_arquivo_destino_param="itens"):
-
+def salvar_em_arquivo(dados_param, nome_arquivo_destino_param="itens") -> bool:
+    """
+    Recebe o dicionário com os dados e um nome da base destino.
+    Retorna true se tudo certo.
+    """
     print("salvando dados de ", nome_arquivo_destino_param, " ... ", end=' ')
 
     try:
@@ -47,38 +42,63 @@ def salvar_em_arquivo(dados_param, nome_arquivo_destino_param="itens"):
     except Exception as erro:
         print(f"***** Erro inesperado  :{erro} **** \n  ")
         print(f"***** os dados não foram salvos **** \n  ")
+        return False
 
     return True
 
+
 # função para abrir arquivo json
-# recebe o nome da base de dados
-# retorna lista com os dados
 
-
-def abrir_arquivo(nome_base_destino_param="itens"):
-    """ Função para abrir o arquivo de dados e retorna uma lista """
+def abrir_arquivo(nome_base_destino_param="itens") -> dict:
+    """
+    Recebe o nome do arquivo contendo o dicionário com os dados
+    Retorna dicionario com os dados
+    """
 
     print(" [ Abrindo arquivo : ", nome_base_destino_param, " ... ] ", end='\n')
 
+    # tenta abrir o arquivo de base de dados
     try:
         with open("jayzon_" + nome_base_destino_param + ".json", "r", encoding='utf8') as arquivo_leitura:
             data_return = json.load(arquivo_leitura)
+
+    # em caso de erro cria um dicionário com dados de teste
     except Exception as erro:
         print(f"***** Erro inesperado  :{erro} **** \n  ")
         print("[ Carregando dados de teste .... ]")
+
         data_return = popula_dados_teste()
+        salvar_em_arquivo(data_return)
 
     return data_return
 
 
-#  Esta funcao desenha o menu principal da aplicação. Coloquei em uma função para não poluir o código principal
-def mostra_menu_principal():
+def popula_dados_teste() -> dict:
     """
-
-    Returns:
-
+    Cria um dicionário com dados de teste
+    Retorna dicionario de dados
     """
+    dados_teste = {}
+
+    for i in range(8):
+        dados_teste[str(i)] = {"codigo": str(i), "nome": "aluno_" + str(i), "cpf": str(i) * 6}
+
+    return dados_teste
+
+
+def limpar_tela() -> None:
+    if os.name == 'nt':
+        os.system('cls')
+    else:
+        os.system('clear')
+    return None
+
+
+#  Desenha o menu principal da aplicação. Coloquei em uma função para não poluir o código principal
+def mostra_menu_principal() -> None:
+
     limpar_tela()
+
     print("")
     print("┌───────────────[ MENU PRINCIPAL ]──────────────┐")
     print("│                                               │")
@@ -91,19 +111,20 @@ def mostra_menu_principal():
     print("│ (9) Sair.                                     │")
     print("│                                               │")
     print("└───────────────────────────────────────────────┘")
+
     return None
 
 
 # Esta funcao desenha o menu secundário da aplicação. Coloquei em uma função para não poluir o código principal
 # ela recebe como parametro o menu secundário que é para ser desenhado. Tendo como valor padrão o menu ESTUDANTE
-def mostra_submenu():
+def mostra_submenu() -> None:
     limpar_tela()
     print("")
     print("┌──────────────[ MENU OPERAÇÕES ]───────────────┐")
     print("│                                               │")
     print("│ (1) Incluir.                                  │")
     print("│ (2) Listar.                                   │")
-    print("│ (3) Atualizar.                                │")
+    print("│ (3) Editar.                                   │")
     print("│ (4) Excluir.                                  │")
     print("│                                               │")
     print("│ (9) Voltar                                    │")
@@ -113,7 +134,7 @@ def mostra_submenu():
 
 
 # Esta funcao desenha a mensagem de opção inválida. Coloquei em uma função para não poluir o código principal
-def msg_opcao_invalida():
+def msg_opcao_invalida() -> None:
     print("\t╔════════════════════╗")
     print("\t║   OPÇÃO INVÁLIDA   ║")
     print("\t╚════════════════════╝")
@@ -121,7 +142,7 @@ def msg_opcao_invalida():
 
 
 # Esta funcao desenha a mensagem de saida da aplicação. Coloquei em uma função para não poluir o código principal
-def msg_saida():
+def msg_saida() -> None:
     limpar_tela()
     print("")
     print(" ╔════════════════════════════════════════════╗")
@@ -133,7 +154,7 @@ def msg_saida():
 
 
 # Esta funcao desenha a mensagem de abertura da aplicação. Coloquei em uma função para não poluir o código principal
-def msg_abertura():
+def msg_abertura() -> None:
     limpar_tela()
     print("")
     print(" ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░")
@@ -146,39 +167,46 @@ def msg_abertura():
     return None
 
 
-def msg_enter_continua():
+def msg_item_nao_encontrado() -> None:
+    print("\t╔══════════════════════════╗")
+    print("\t║   Item não encontrado    ║")
+    print("\t╚══════════════════════════╝")
+    input(" pressione <ENTER> para continuar")
+    return None
+
+
+def msg_enter_continua() -> None:
     input("\t Pressione <ENTER> para continuar ...")
     return None
 
 
-def popula_dados_teste():
-    lista = []
-    for i in range(8):
-        lista.append({"codigo": 1 * i, "nome": "aluno_" + str(i), "cpf": str(i) * 6})
-    return lista
+def inserir_item(novo_item, dados_param) -> dict:
+    novo_id = int(next(reversed(dados_param.keys()))) + 1
+    novo_item['codigo'] = novo_id
 
+    dados_param[str(novo_id)] = novo_item
 
-def inserir_item(novo_item, lista_param):
-
-    lista_param.append(novo_item)
+    # lista_param.append(novo_item)
     print(f"\t Item inserido com sucesso: \n \t {1} ", novo_item['nome'])
 
-    return lista_param
+    salvar_em_arquivo(dados_param)
+
+    return dados_param
 
 
-def listar_itens(lista_param, nome="ITENS"):
+def listar_itens(dados_param, nome="itens") -> None:
     limpar_tela()
     print("")
     print("┌───────────────────────────────────────────────┐")
-    print("│            LISTAR {0:<11}                 │".format(nome))
+    print("│            LISTAR {0:<11}                 │".format(nome.upper()))
     print("│                                               │")
-    if len(lista_param) > 0:
-        k = list(lista_param[0].keys())
+    if len(dados_param) > 0:
+        k = list(dados_param[next(iter(dados_param))].keys())
 
         print("├────────┬─────────────────────────┬────────────┤")
         print(f"│ {k[0]:<6} │ {k[1]:<23} │ {k[2]:<11}│")  # desenha o cabeçalho (keys) da tabela
 
-        for item in lista_param:  # desenha cada linha da tabela
+        for item in dados_param.values():  # desenha cada linha da tabela
             print("├────────┼─────────────────────────┼────────────┤")
             print(f"│ {item[k[0]]:<6} │ {item[k[1]]:<23} │ {item[k[2]]:<11}│")
         print("└────────┴─────────────────────────┴────────────┘")
@@ -191,7 +219,7 @@ def listar_itens(lista_param, nome="ITENS"):
     return None
 
 
-def buscar_item(lista_param):
+def input_codigo() -> str:
 
     # filtro de entrada - laço obriga usuário digitar um número
     while True:
@@ -200,30 +228,56 @@ def buscar_item(lista_param):
         if codigo_busca.isdigit():
             break
         else:
-            print("*** código inválido. **** ")
+            print("*** Código inválido. **** ")
             print("*** Digite um código númérico. **** ")
 
-    # varre a lista em busca do item procurado
-    for index, item in enumerate(lista_param):
-        if int(codigo_busca) == item['codigo']:  # procura item com o código informado
-            return index  # retorna o item encontrado
+    return codigo_busca
+
+
+def editar_item(dados_param) -> dict:
+
+    codigo_item = input_codigo()
+
+    # verifica se existe  o item com código informado
+    if codigo_item in dados_param:
+
+        # recebe os dados do novo item
+        novo_item = {'codigo': codigo_item,
+                     'nome': input("\n Digite o novo nome: "),
+                     'cpf': input("\n Digite o novo CPF: ")}
+
+        # tenta atualizar o aluno
+        try:
+            dados_param[codigo_item] = novo_item
+            salvar_em_arquivo(dados_param)
+
+        # se falhar mostra o erro
+        except Exception as erro:
+            print(" *** ocorreu um erro quando estava atualizando o aluno **** \n Erro = ", erro)
+
+        # se funcionar exibe mensagem de sucesso
+        else:
+            print("\t╔═══════════════════════════════════════════╗")
+            print(f"\t║ *** ALUNO {novo_item['codigo']:<4} ATUALIZADO COM SUCESSO *** ║")
+            print("\t╚═══════════════════════════════════════════╝")
     else:
-        print("\t╔══════════════════════════╗")
-        print("\t║   Item não encontrado    ║")
-        print("\t╚══════════════════════════╝")
-        input(" pressione <ENTER> para continuar")
+        msg_item_nao_encontrado()
 
-    return False
+    return dados_param
 
 
-def remover_item(lista_param):
-    item_index = buscar_item(lista_param)
+def remover_item(dados_param) -> dict:
+    codigo_item = input_codigo()
 
-    if item_index is not False:
-        item_encontrado = lista_param[item_index]['nome']
+    # verifica se existe item com o código informado
+    if codigo_item in dados_param:
+        # pede confirmação da exclusão
+
         print("\t╔════════════════════════════════════════════════════════════╗")
-        print(f"\t║    tem certeza que deseja excluir {item_encontrado:^20} ?   ║")
+        print(f"\t║    tem certeza que deseja excluir {dados_param[codigo_item]['nome']:^20} ?   ║")
         print("\t╚════════════════════════════════════════════════════════════╝")
+
+        # loop para confirmar exclusão
         while True:
 
             confirmacao = input("\t Digite [S] para SIM  ou [N] para NÃO ").upper()
@@ -231,14 +285,21 @@ def remover_item(lista_param):
             # Resposta SIM - deletar o aluno
             if confirmacao == "S":
                 try:
-                    del lista_param[item_index]
+                    del dados_param[codigo_item]
+                    salvar_em_arquivo(dados_param)
+
+                # se falhar mostra o erro
                 except Exception as erro:
                     print("*** falha na exclusao *** \n Erro :", erro)
+
+                # se funciona exibe mensagem de sucesso
                 else:
                     print("\t╔═══════════════════════════════════════════╗")
-                    print("\t║ ****    ITEM EXCLUIDO COM SUCESSO    **** ║")
+                    print("\t║   ****  ITEM EXCLUIDO COM SUCESSO  ****   ║")
                     print("\t╚═══════════════════════════════════════════╝")
-                finally:  # em qualquer caso quebra o laço while de confirmação da exclusão
+
+                # em qualquer caso quebra o loop while de confirmação da exclusão
+                finally:
                     break
 
             # resposta NÃO - cancelar exclusão
@@ -247,43 +308,17 @@ def remover_item(lista_param):
                 print("\t║   EXCLUSÃO CANCELADA   ║")
                 print("\t╚════════════════════════╝")
                 break  # quebra o laço while de confirmação da exclusão
-                # resposta inválida
+
+            # resposta inválida - nao quebra o loop de confirmação
             else:
-                print("\t╔════════════════════╗")
-                print("\t║   OPÇÃO INVÁLIDA   ║")
-                print("\t╚════════════════════╝")
+                msg_opcao_invalida()
 
-    return lista_param
+    return dados_param
 
 
-def editar_item(lista_param):
+def main() -> int:
 
-    item_index = buscar_item(lista_param)
-
-    if item_index is not False:
-        novo_item = {'codigo': lista_param[item_index]['codigo'],
-                     'nome': input("\n Digite o novo nome: "),
-                     'cpf': input("\n Digite o novo CPF: ")}
-
-        try:  # tenta atualizar o aluno
-            lista_param[item_index] = novo_item
-
-        except Exception as erro:  # se ocorrer um erro
-            print(" *** ocorreu um erro quando estava atualizando o aluno **** \n Erro = ", erro)
-
-        else:  # se funcionar
-            print("\t╔═══════════════════════════════════════════╗")
-            print(f"\t║ *** ALUNO {novo_item['codigo']:<4} ATUALIZADO COM SUCESSO *** ║")
-            print("\t╚═══════════════════════════════════════════╝")
-
-    return lista_param
-
-
-def main():
-
-    lista_alunos = abrir_arquivo()
-
-    gerador_codigo_aluno = lista_alunos[len(lista_alunos)-1]['codigo'] + 1
+    db_alunos = abrir_arquivo()
 
     msg_abertura()  # chama mensagem de abertura da aplicação
 
@@ -304,33 +339,31 @@ def main():
                 match opcao_submenu1:
                     case "1":  # Opção de INCLUIR
 
-                        novo_item = {"codigo": gerador_codigo_aluno, "nome": input("\t Informe o NOME a ser inserido:  "),
+                        novo_item = {"codigo": '',
+                                     "nome": input("\t Informe o NOME a ser inserido:  "),
                                      "cpf": input("\t Informe o CPF a ser inserido:  ")}
 
-                        lista_alunos = inserir_item(novo_item, lista_alunos)
+                        db_alunos = inserir_item(novo_item, db_alunos)
 
-                        salvar_em_arquivo(lista_alunos)
-
-                        gerador_codigo_aluno += 1
                         msg_enter_continua()
 
                     case "2":  # Opção de LISTAR
                         print("\t RELAÇÃO DOS ALUNOS CADASTRADOS")
 
-                        listar_itens(lista_alunos)
+                        listar_itens(db_alunos)
 
                         msg_enter_continua()
 
                     case "3":  # Opção de EDITAR
 
-                        lista_alunos = editar_item(lista_alunos)
-                        salvar_em_arquivo(lista_alunos)
+                        db_alunos = editar_item(db_alunos)
+
                         msg_enter_continua()
 
                     case "4":  # Opção de EXCLUIR
 
-                        lista_alunos = remover_item(lista_alunos)
-                        salvar_em_arquivo(lista_alunos)
+                        db_alunos = remover_item(db_alunos)
+
                         msg_enter_continua()
 
                     case "9" | "q":  # Opção de SAIR
@@ -354,7 +387,7 @@ def main():
 
         elif opcao_menu_principal == "9" or opcao_menu_principal == "q":  # OPÇÃO SAIR DO MENU PRINCIPAL
             msg_saida()
-            salvar_em_arquivo(lista_alunos)
+            salvar_em_arquivo(db_alunos)
             return None
         else:  # CASO O USUÁRIO DIGITE OPÇÃO INVALIDA
             msg_opcao_invalida()
