@@ -2,7 +2,7 @@
 *.log
 *.pyc
 *.class
-
+*.json
 # Ignorar diretórios de ambiente virtual
 venv/
 env/
@@ -10,4 +10,3 @@ env/
 .vscode/
 .idea/
 
-/jayzon_itens.json
