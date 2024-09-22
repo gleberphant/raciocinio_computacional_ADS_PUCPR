@@ -18,6 +18,12 @@
 # -O que devo desenvolver?
 # - Implementar todas as funcionalidades já desenvolvidas (ex.: incluir e listar) para os demais módulos do sistema.
 # Veja os dados necessários para cada um dos grupos abaixo:
+#
+# Alunos
+# - Código do aluno (Número inteiro)
+# - Nome do aluno (String)
+# - CPF do aluno (String)
+#
 # Professores
 # - Código do professor (Número inteiro)
 # - Nome do professor (String)
@@ -33,6 +39,7 @@
 # - Código da disciplina (Número inteiro)
 #
 # Matrículas
+# - Código matricula (Número inteiro)
 # - Código da turma (Número inteiro)
 # - Código do estudante (Número inteiro)
 #
@@ -54,30 +61,61 @@
 # IMPORTAÇÕES DE BIBLIOTECAS UTILIZADAS
 import json
 import os
+import argparse
+from typing import Final
+
+
+# ESTRUTURA/CLASS COM AS CONFIGURAÇÕES DA APLICAÇÃO
+class SETTINGS:
+    debug_mode: bool = False
+
+    KEYSET = {
+        "alunos": ("codigo", "nome", "cpf"),
+        "professores": ("codigo", "nome", "cpf"),
+        "disciplinas": ("codigo", "nome"),
+        "turmas": ("codigo", "professor_id", "disciplina_id"),
+        "matriculas": ("codigo", "turma_id", "aluno_id")
+    }
+
+
+# ESTRUTURA/CLASS COM AS CONSTANTES UTILIZADAS NA APLICAÇÃO
+class CONSTS:
+    OPT_ALUNOS:         Final = '1'
+    OPT_PROFESSORES:    Final = '2'
+    OPT_DISCIPLINAS:    Final = '3'
+    OPT_TURMAS:         Final = '4'
+    OPT_MATRICULAS:     Final = '5'
+
+    OPT_CREATE: Final = '1'
+    OPT_READ:   Final = '2'
+    OPT_UPDATE: Final = '3'
+    OPT_DELETE: Final = '4'
 
 
 # FUNÇÕES PARA EXIBIÇÃO DE MENSAGENS PADRONIZADAS
-def limpar_tela() -> None:
+def clean_screen() -> None:
     """
     Apaga toda a tela para novos desenhos.
     Não recebe parametros
     Sem retorno
     """
-    if os.name == 'nt':
-        os.system('cls')
-    else:
-        os.system('clear')
+    if not SETTINGS.debug_mode:
+        if os.name == 'nt':
+            os.system('cls')
+        else:
+            os.system('clear')
+
     return None
 
 
 #  Desenha o menu principal da aplicação. Coloquei em uma função para não poluir o código principal
-def desenha_menu_principal() -> None:
+def show_menu_main() -> None:
     """
     Desenha o menu principal
     não recebe parametros
     sem retorno
     """
-    limpar_tela()
+    clean_screen()
 
     print("")
     print("┌───────────────[ MENU PRINCIPAL ]──────────────┐")
@@ -95,13 +133,13 @@ def desenha_menu_principal() -> None:
     return None
 
 
-def desenha_submenu(opcao_principal="OPERAÇÕES") -> None:
+def show_menu_crud(opcao_principal="OPERAÇÕES") -> None:
     """
     Desenha o menu secundário
     não recebe parametros
     sem retorno
     """
-    limpar_tela()
+    clean_screen()
     print("")
     print(f"┌────────────[{opcao_principal:^18}]───────────────┐")
     print("│                                               │")
@@ -130,12 +168,14 @@ def msg_opcao_invalida() -> None:
 
 def msg_saida() -> None:
     """
-    Desenha a mensagem de saida do programa
+    Mensagem de saida do programa.
+    Se ativado o modo debug nao apaga tela para manter os registros de erro
     não recebe parametros
     sem retorno
     """
 
-    limpar_tela()
+    clean_screen()
+
     print("")
     print(" ╔════════════════════════════════════════════╗")
     print(" ║      Dúvidas e sugestões?                  ║")
@@ -147,12 +187,14 @@ def msg_saida() -> None:
 
 def msg_abertura() -> None:
     """
-    Desenha a mensagem de abertura do programa
+    Mensagem de abertura do programa
+    Se ativado o modo debug nao apaga tela para manter os registros de erro
     não recebe parametros
     sem retorno
     """
 
-    limpar_tela()
+    clean_screen()
+
     print("")
     print(" ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░")
     print(" ░░░░░░░░░░SISTEMA DE GESTÃO ACADÊMICA░░░░░░░░")
@@ -162,6 +204,18 @@ def msg_abertura() -> None:
     print("")
     msg_enter_continua()
     return None
+
+
+def msg_item_atualizado() -> None:
+    """
+    Desenha a mensagem de item atualizado
+    não recebe parametros
+    sem retorno
+    """
+
+    print("\t╔═══════════════════════════════════════════╗")
+    print("\t║         ITEM ATUALIZADO COM SUCESSO       ║")
+    print("\t╚═══════════════════════════════════════════╝")
 
 
 def msg_item_nao_encontrado() -> None:
@@ -180,6 +234,11 @@ def msg_item_nao_encontrado() -> None:
 
 
 def msg_em_desenvolvimento() -> None:
+    """
+    Desenha a mensagem em desenvolvimento
+    não recebe parametros
+    sem retorno
+    """
     print("")
     print(" ╔════════════════════════════════════════════╗")
     print(" ║            EM DESENVOLVIMENTO              ║")
@@ -200,17 +259,21 @@ def msg_enter_continua() -> None:
 
 
 # DEFINIÇÃO DAS FUNÇÕES
-def salvar_em_arquivo(dados_param, arquivo_destino_param="itens") -> bool:
+def save_tbl_to_file(tbl_param) -> bool:
     """
     Função para salvar os dados em um arquivo JSON
-    Recebe o dicionário com os dados e um nome da base destino.
+    Recebe o dicionário com a tabela com os dados.
     Retorna true se tudo certo.
     """
-    print(f"\t Salvando dados de: {arquivo_destino_param:.<15}", end=' ')
+
+    filename = tbl_param["name"] or "itens"
+    dataset = tbl_param["data"]
+
+    print(f"\t Salvando dados de: {filename:.<15}", end=' ')
 
     try:
-        with open("jayzon_" + arquivo_destino_param + ".json", "w", encoding='utf8') as arquivo_escrita:
-            json.dump(dados_param, arquivo_escrita, indent=4, ensure_ascii=False)
+        with open("jayzon_" + filename + ".json", "w", encoding='utf8') as arquivo_escrita:
+            json.dump(dataset, arquivo_escrita, indent=4, ensure_ascii=False)
             print("[Dados salvo com sucesso] ")
 
     except Exception as erro:
@@ -222,237 +285,323 @@ def salvar_em_arquivo(dados_param, arquivo_destino_param="itens") -> bool:
     return True
 
 
-def abrir_arquivo(arquivo_destino_param="itens", default_keys=("codigo", "nome", "cpf")) -> dict:
+def load_tbl_from_file(filename_param="itens", keyset_param=("codigo", "nome", "cpf")) -> dict:
     """
     Função para abrir arquivo json
     Recebe o nome do arquivo com os dados
     Retorna dicionario com os dados
     """
 
-    print(f"\t Carregando base de dados: {arquivo_destino_param:.<15}", end=' ')
+    print(f"\t Carregando base de dados: {filename_param:.<15}", end=' ')
 
     # tenta abrir o arquivo de base de dados
     try:
-        with open("jayzon_" + arquivo_destino_param + ".json", "r", encoding='utf8') as arquivo_leitura:
-            data_return = json.load(arquivo_leitura)
-            keys_return = (key for key in data_return[next(iter(data_return))])
-            default_keys = keys_return
-            print("[Dados carregados com sucesso] ")
+        with open("jayzon_" + filename_param + ".json", "r", encoding='utf8') as arquivo_leitura:
+            dataset = json.load(arquivo_leitura)
+            print("[Dados carregados] ")
 
     # em caso de erro cria um dicionário com dados de teste
     except Exception as erro:
         print(f"[ {erro} ] Carregando dados de teste ....")
-        data_return = popula_dados_teste(arquivo_destino_param, default_keys)
-        keys_return = default_keys
+        dataset = get_default_dataset(filename_param, keyset_param)
 
     tbl_return = {
-        "name": arquivo_destino_param,
-        "keys": keys_return,
-        "data": data_return
+        "name": filename_param,
+        "keys": keyset_param,
+        "data": dataset
     }
 
     return tbl_return
 
 
-def popula_dados_teste(nome_base="item", default_keys=("codigo", "nome", "cpf")) -> dict:
+def get_default_dataset(itemname_param="item", default_keys=("codigo", "nome", "cpf")) -> dict:
     """
     Função para debug do sistema. Cria um dicionário com dados de teste
     Não recebe parametros
     Retorna dicionario com dados de teste
     """
 
-    dados_teste = dict()
+    default_dataset = dict()
 
     for i in ('0', '1', '2'):
+        default_dataset[i] = dict()
         for key in default_keys:
             if key == "codigo":
-                dados_teste[i]["codigo"] = i
+                default_dataset[i]["codigo"] = i
             elif key == "nome":
-                dados_teste[i][key] = nome_base + "_" + str(i)
+                default_dataset[i][key] = itemname_param + "_" + str(i)
             else:
-                dados_teste[i][key] = i
+                default_dataset[i][key] = i
 
-    return dados_teste
+    return default_dataset
 
 
-def inserir_novo_item(tbl_param) -> bool:
+def save_database(database_param: dict) -> bool:
     """
-    Insere um item em uma base de dados
-    recebe o item que será inserido e o dicionário de destino com os dados
-    sem retorno
+    Salvar a database em um arquivo pemanente
+    recebe a database que será salva
+    retorna True se ocorreu com sucesso e false se ocorreu falha
     """
+    print("──────────────────────────────────────────────────")
+    print(f"{'Salvando database':.<50}")
 
-    novo_item = dict()
+    for tbl in database_param.values():
+        try:
+            save_tbl_to_file(tbl)
+        except Exception as erro:
+            print(f"não foi possível salvar {erro}")
 
-    if len(tbl_param["data"]) > 0:
-        # pega o id do último item e soma +1
-        ultimo_id = next(reversed(tbl_param["data"].keys()))
-
-        chaves = tbl_param["data"][ultimo_id].keys()
-
-        novo_id = str(int(ultimo_id) + 1)
-
-    else:
-        novo_id = '0'
-        chaves = tbl_param["keys"]
-
-    for chave in chaves:
-        if chave == "codigo":
-            novo_item[chave] = novo_id
-        else:
-            novo_item[chave] = input(f"\t Informe o {chave} a ser inserido ")
-
-    # cria um novo item no banco de dados com o código novo
-    tbl_param["data"][novo_id] = novo_item
-
-    # lista_param.append(novo_item)
-    print(f"\t Item inserido com sucesso: {novo_item} ",)
-
+    print("──────────────────────────────────────────────────")
     return True
-
-
-def listar_itens(dados_param, nome="itens") -> None:
-    """
-    Desenha a lista de itens de uma base de dados
-    recebe dicionario com os dados e o nome da base
-    sem retorno
-    """
-    limpar_tela()
-    print("")
-
-    if len(dados_param) > 0:
-        # k = list(dados_param[min(dados_param)].keys())
-        titulo = "LISTAR " + nome.upper()
-        chaves = [key for key in dados_param[next(iter(dados_param))].keys()]
-
-        if len(chaves) == 3:
-            print("┌─────────────────────────────────────────────────────┐")
-            print(f"│{titulo:^53}│")
-            print("│                                                     │")
-            print("├──────────┬─────────────────────────┬────────────────┤")
-            print(f"│ {chaves[0].upper():^8} │ {chaves[1].upper():^23} │ {chaves[2].upper():^15}│")  # desenha o cabeçalho (keys) da tabela
-
-            for item in dados_param.values():  # desenha cada linha da tabela
-                print("├──────────┼─────────────────────────┼────────────────┤")
-                print(f"│ {item[chaves[0]]:^8} │ {item[chaves[1]]:<23} │ {item[chaves[2]]:<15}│")
-            print("└──────────┴─────────────────────────┴────────────────┘")
-            print("")
-
-        else:
-            print("┌────────────────────────────────────┐")
-            print(f"│{titulo:^36}│")
-            print("│                                    │")
-            print("├──────────┬─────────────────────────┤")
-            print(
-                f"│ {chaves[0].upper():^8} │ {chaves[1].upper():^23} │")  # desenha o cabeçalho (keys) da tabela
-
-            for item in dados_param.values():  # desenha cada linha da tabela
-                print("├──────────┼─────────────────────────┤")
-                print(f"│ {item[chaves[0]]:^8} │ {item[chaves[1]]:<23} │")
-            print("└──────────┴─────────────────────────┘")
-            print("")
-    else:
-        print("┌───────────────────────────────────────────────┐")
-        print("│                                               │")
-        print("│        *** Não há item cadastrado ***         │")
-        print("│                                               │")
-        print("└───────────────────────────────────────────────┘")
-    return None
 
 
 def input_codigo() -> str:
     """
-    Tratamento da entrada de codigo para consulta alguma base de dados
-    Não recebe parametros
-    retorna o codigo lido
+    Solicita e valida a entrada de um código numérico.
+    Recebe: Nenhum parâmetro, solicita o código via input do usuário.
+    Retorna: str - O código numérico inserido pelo usuário, após validação.
     """
 
-    # filtro de entrada - laço obriga usuário digitar um número
     while True:
-        codigo_busca = input("\n Digite o Codigo do item buscado: ")
+        codigo = input("\n Digite o Codigo do item buscado: ")
 
-        if codigo_busca.isdigit():
+        if codigo.isdigit():
             break
         else:
             print("*** Código inválido. **** ")
             print("*** Digite um código númérico. **** ")
+        # end else
+    # end while
 
-    return codigo_busca
+    return codigo
 
 
-def editar_item(dados_param) -> bool:
+def valid_id(id_param: str, dataset: dict, name_para: str) -> bool:
     """
-    Editar o item de uma base dados
-    recebe a base de dados
-    retorna os dados alterados
+    Valida se o _id existe no dataset.
+    Recebe: Dataset com itens e o ID a ser validado
+    Retorna: bool - true se o ID existir no dataset, false se não existir.
     """
 
-    # ler código de destino da alteração
-    codigo_item = input_codigo()
+    if not has_item_in_dataset(id_param, dataset):
+        print("\t╔═════════════════════════════════════════════╗")
+        print(f"\t║{name_para.upper()+" INEXISTENTE ":^45}║")
+        print("\t╚═════════════════════════════════════════════╝")
+        return False
+    return True
 
-    # verifica se existe o item com código informado
-    if codigo_item in dados_param:
 
-        # recebe os dados do novo item
-        for chave in dados_param[codigo_item].keys():
-            if chave == "codigo":
-                pass
-            else:
-                dados_param[codigo_item][chave] = input(f"\t Informe o novo {chave} : ")
+def is_aluno_in_turma(matricula_nova, dataset_matricula):
+    """
+    Verifica se o aluno já está matriculado na turma.
+    Recebe: matricula_nova (dict), dataset_matricula (dict)
+    Retorna: bool (True se o aluno já estiver matriculado na turma, False caso contrário)
+    """
 
-        print("\t╔═══════════════════════════════════════════╗")
-        print(f"\t║     ITEM  {codigo_item:<4} ATUALIZADO COM SUCESSO     ║")
-        print("\t╚═══════════════════════════════════════════╝")
+    for matricula in dataset_matricula.values():
 
-    else:
-        msg_item_nao_encontrado()
+        if (matricula["aluno_id"] == matricula_nova["aluno_id"] and
+                matricula["turma_id"] == matricula_nova["turma_id"]):
+            print("\t╔══════════════════════════════════════════════════════╗")
+            print("\t║         ALUNO(A) JA MATRÍCULADO NA TURMA             ║")
+            print("\t╚══════════════════════════════════════════════════════╝")
+            return True
+        # end if
+    # end for
+    return False
+
+
+def validate_matricula(nova_matricula: dict, database: dict) -> bool:
+    """
+    Valida uma nova matrícula verificando a existência do aluno e da turma,
+    Recebe: Dicionário contendo os dados da nova matrícula (aluno_id e turma_id) e
+            Dicionário contendo as tabelas 'tbl_turmas', 'tbl_alunos' e 'tbl_matriculas' com seus dados.
+    Retorna: bool - True se a matrícula for válida, False se algum critério de validação falhar.
+    """
+    if not valid_id(nova_matricula["turma_id"], database["tbl_turmas"]["data"], "turma"):
+        return False
+
+    if not valid_id(nova_matricula["aluno_id"], database["tbl_alunos"]["data"], "aluno"):
+        return False
+
+    if is_aluno_in_turma(nova_matricula, database["tbl_matriculas"]["data"]):
+        return False
 
     return True
 
 
-def excluir_item(dados_param) -> bool:
+def validate_turma(nova_turma: dict, database: dict) -> bool:
+    """
+    Valida uma nova turma verificando a existência do professor e da disciplina
+    Recebe: Dicionário contendo os dados da nova turma e Dicionário contendo a database.
+    Retorna: bool - True se a matrícula for válida, false se algum critério de validação falhar.
+    """
+    if not valid_id(nova_turma["professor_id"], database["tbl_professores"]["data"], "professor"):
+        return False
+
+    if not valid_id(nova_turma["disciplina_id"], database["tbl_disciplinas"]["data"], "disciplina"):
+        return False
+
+    return True
+
+
+def valid_item(item: dict, database: dict) -> bool:
+    """
+    Chama o validador correspondente ao item a ser validado.
+    Recebe o item a ser validado e dataset que contém os registros existentes.
+    Retorna True se a validação passar e False se a validação falhar
+    """
+
+    # se possuir as chaves "turma_id" e "aluno_id" o item é uma matrícula
+    if "professor_id" in item and "disciplina_id" in item:
+        return validate_turma(item, database)
+
+    if "turma_id" in item and "aluno_id" in item:
+        return validate_matricula(item, database)
+
+    return True
+
+
+def get_last_key(dataset) -> str:
+    """
+    Retorna a última chave do dataset.
+    Recebe: dataset_param (dict)
+    Retorno: str (última chave como string)
+    """
+
+    last_id = next(reversed(dataset.keys()))
+    return last_id
+
+
+def get_next_key(dataset) -> str:
+    """
+    Retorna a próxima chave disponível no dataset.
+    Recebe: dataset_param (dict)
+    Retorno: str (próxima chave como string)
+    """
+    return str(int(get_last_key(dataset)) + 1) if len(dataset) > 0 else '0'
+
+
+def get_new_item(keyset: tuple, id_param: str) -> dict:
+    """
+    Cria um novo item com base nas chaves fornecidas e solicita os valores via input.
+    Recebe: tupla contendo as chaves a serem usadas no item.
+    Retorna: novo item criado com as chaves e valores inseridos
+    """
+    new_item = dict()
+    for key in keyset:
+        # tratamento dos inputs
+        if key == "codigo":
+            new_item["codigo"] = id_param
+        else:
+            new_item[key] = input(f"\t Informe o {key} a ser inserido ")
+
+    return new_item
+
+
+def has_item_in_dataset(codigo_param, data_param) -> bool:
+    return True if codigo_param in data_param else False
+
+
+def insert_item(item, database, name_param):
+    """
+    Valida o novo item e tenta inseri-lo no dataset com o código fornecido.
+    Recebe: new_item (dict), dataset (dict), codigo (str)
+    Retorna: bool (True se o item for inserido com sucesso, False em caso de erro)
+    """
+
+    dataset = database["tbl_" + name_param]["data"]
+    id_param = item["codigo"]
+    if not valid_item(item, database):
+        return False
+
+    try:
+        dataset[id_param] = item
+        msg_item_atualizado()
+        return True
+
+    except Exception as erro:
+        print(f"{erro}")
+        return False
+
+
+def create_item(database_param: dict, name_param: str) -> bool:
+    """
+    Insere um item em uma tabela de dados
+    Recebe: a tabela em que o item deve ser inserido
+    retorna True se funcionou False de falhou
+    """
+    tbl_param = database_param["tbl_"+name_param]
+
+    new_id = get_next_key(tbl_param["data"])
+    new_item = get_new_item(tbl_param["keys"], new_id)
+
+    return insert_item(new_item, database_param, name_param)
+
+
+def update_item(database_param: dict, name_param: str) -> bool:
+    """
+    Editar o item de uma base dados
+    recebe a base de dados
+    retorna True se funcionou False de falhou
+    """
+    dataset = database_param["tbl_"+name_param]["data"]
+
+    codigo = input_codigo()
+
+    if has_item_in_dataset(codigo, dataset):
+        new_item = get_new_item(dataset[codigo].keys(), codigo)
+        return insert_item(new_item, database_param, name_param)
+
+    else:
+        msg_item_nao_encontrado()
+
+    return False
+
+
+def delete_item(dataset_param) -> bool:
     """
     Remover um item de uma base dados
     recebe a base de dados
-    retorna a base de dados sem o dado removido
+    retorna True se funcionou False de falhou
     """
 
     codigo_item = input_codigo()
 
     # verifica se existe item com o código informado
-    if codigo_item in dados_param:
-        # pede confirmação da exclusão
+    if has_item_in_dataset(codigo_item, dataset_param):
 
         print("\t╔════════════════════════════════════════════════════════════╗")
-        print(f"\t║    tem certeza que deseja excluir {dados_param[codigo_item]['codigo']:^20} ?   ║")
+        print(f"\t║{"Tem certeza que deseja excluir o item " + dataset_param[codigo_item]['codigo'] + "?":^60}║")
         print("\t╚════════════════════════════════════════════════════════════╝")
 
         # loop para confirmar exclusão
         while True:
 
-            confirmacao = input("\t Digite [S] para SIM  ou [N] para NÃO ").upper()
+            confirm_flag = input("\t Digite [S] para SIM  ou [N] para NÃO ").upper()
 
             # Resposta SIM - deletar o aluno
-            if confirmacao == "S":
+            if confirm_flag == "S":
                 try:
-                    del dados_param[codigo_item]
+                    del dataset_param[codigo_item]
 
                 # se falhar mostra o erro
                 except Exception as erro:
                     print("*** Falha inesperada na exclusao do item: ", erro)
+                    return False
 
                 # se funciona exibe mensagem de sucesso
                 else:
                     print("\t╔═══════════════════════════════════════════╗")
                     print("\t║         ITEM EXCLUIDO COM SUCESSO         ║")
                     print("\t╚═══════════════════════════════════════════╝")
-
+                    return True
                 # em qualquer caso quebra o loop while de confirmação da exclusão
                 finally:
                     break
 
             # resposta NÃO - cancelar exclusão
-            elif confirmacao == "N":
+            elif confirm_flag == "N":
                 print("\t╔════════════════════════╗")
                 print("\t║   EXCLUSÃO CANCELADA   ║")
                 print("\t╚════════════════════════╝")
@@ -461,161 +610,213 @@ def excluir_item(dados_param) -> bool:
             # resposta inválida - nao quebra o loop de confirmação
             else:
                 msg_opcao_invalida()
+    else:
+        msg_item_nao_encontrado()
+
+    return False
+
+
+def list_itens(tbl_param: dict) -> bool:
+    """
+    Desenha a lista de itens de uma base de dados
+    recebe dicionario com os dados e o nome da base
+    retorna True se funcionou False de falhou
+    """
+    clean_screen()
+    print("")
+    dataset = tbl_param["data"]
+    name = tbl_param["name"]
+
+    if len(dataset) > 0:
+        # k = list(dados_param[min(dados_param)].keys())
+        title = "LISTA DE " + name.upper()
+        itens_keys = [key for key in dataset[next(iter(dataset))].keys()]
+
+        if len(itens_keys) == 3:
+
+            # desenha cabeçalho da tabela com 2 colunas
+            print("┌─────────────────────────────────────────────────────┐")
+            print(f"│{title:^53}│")
+            print("├──────────┬─────────────────────────┬────────────────┤")
+
+            # desenha o titulo das 3 colunas
+            print(f"│ {itens_keys[0].upper():^8} │ {itens_keys[1].upper():^23} │ {itens_keys[2].upper():^15}│")
+
+            # desenha as linhas da tabela com 3 colunas
+            for item in dataset.values():
+                print("├──────────┼─────────────────────────┼────────────────┤")
+                print(f"│ {item[itens_keys[0]]:^8} │ {item[itens_keys[1]]:<23} │ {item[itens_keys[2]]:<15}│")
+
+            # desenha rodapé da tabela com 3 colunas
+            print("└──────────┴─────────────────────────┴────────────────┘")
+            print("")
+
+        else:
+            # cabeçalho da tabela com 2 colunas
+            print("┌────────────────────────────────────┐")
+            print(f"│{title:^36}│")
+            print("├──────────┬─────────────────────────┤")
+
+            #  titulo das 2 colunas
+            print(
+                f"│ {itens_keys[0].upper():^8} │ {itens_keys[1].upper():^23} │")  # desenha o cabeçalho (keys) da tabela
+
+            #  linhas da tabela com 3 colunas
+            for item in dataset.values():  # desenha cada linha da tabela
+                print("├──────────┼─────────────────────────┤")
+                print(f"│ {item[itens_keys[0]]:^8} │ {item[itens_keys[1]]:<23} │")
+
+            #  rodapé da tabela com 3 colunas
+            print("└──────────┴─────────────────────────┘")
+            print("")
+    else:
+        print("┌───────────────────────────────────────────────┐")
+        print("│                                               │")
+        print("│        *** Não há item cadastrado ***         │")
+        print("│                                               │")
+        print("└───────────────────────────────────────────────┘")
 
     return True
 
 
 # FUNÇÃO PRINCIPAL
-def main() -> int:
+def main(debug_mode=False) -> int:
     """
-    Função principal do programa
+    Função principal
     sem parametros
     retorno o estado final
     """
 
-    # chama mensagem de abertura da aplicação
+    # configurando aplicação e definindo variáveis
+    print("──────────────────────────────────────────────────")
+    print(f"{'Definindo variáveis do ambiente':.<50}")
+
+    # ativar o modo de depuração
+    if debug_mode:
+        print("Modo de depuração ativado")
+        print("Neste modo a tela não é limpa a cada ação e as mensagems do sistema permanecem")
+        SETTINGS.debug_mode = True
+
+    running: bool = True
+
+    target_tbl: dict = dict()
+
+    # carrega base de dados da aplicação
+    print(f"{'Carregando arquivos':.<50}")
+    database = {
+        "tbl_alunos": load_tbl_from_file("alunos", SETTINGS.KEYSET["alunos"]),
+        "tbl_professores": load_tbl_from_file("professores", SETTINGS.KEYSET["professores"]),
+        "tbl_disciplinas": load_tbl_from_file("disciplinas", SETTINGS.KEYSET["disciplinas"]),
+        "tbl_turmas": load_tbl_from_file("turmas", SETTINGS.KEYSET["turmas"]),
+        "tbl_matriculas": load_tbl_from_file("matriculas", SETTINGS.KEYSET["matriculas"])
+    }
+
+    print(f"{'Carregamento finalizado ':.<50}")
+    print("───────────────────────────────────────────────")
+
+    # mensagem de abertura da aplicação
     msg_abertura()
 
-    print("Carregando arquivos")
-    # carrega base de dados da aplicação
-    keyset = {
-        "alunos":       ("codigo", "nome", "cpf"),
-        "professores":  ("codigo", "nome", "cpf"),
-        "disciplinas":  ("codigo", "nome"),
-        "turmas":       ("codigo", "professor_id", "disciplina_id"),
-        "matriculas":   ("codigo", "turma_id", "aluno_id")
-    }
-
-    database = {
-        "tbl_alunos": abrir_arquivo("alunos", keyset["alunos"]),
-        "tbl_professores": abrir_arquivo("professores", keyset["professores"]),
-        "tbl_disciplinas": abrir_arquivo("disciplinas", keyset["disciplinas"]),
-        "tbl_turmas": abrir_arquivo("turmas", keyset["turmas"]),
-        "tbl_matriculas": abrir_arquivo("matrículas", keyset["matriculas"])
-    }
-
-    print("Setando configurações")
-    running = True
-
-    tbl_destino = dict()
-    data_destino = dict()
-    chaves_destino = tuple()
-    nome_destino = str()
-
-    print("Iniciando menu principal")
     # Loop principal da aplicação. Roda enquanto não receber um BREAK
-
     while running:  # main app loop
 
         # loop do menu primário
         while running:
 
             #  desenha o menu principal
-            desenha_menu_principal()
+            show_menu_main()
 
             #  aguarda seleção da opção
-            opcao_menu_principal = input("\t Informe o numero da opção desejada:  ")
+            option_menu_main = input("\t Informe o numero da opção desejada:  ")
 
-            # OPÇÃO alunos
-            if opcao_menu_principal == '1':
+            match option_menu_main:
+                # OPÇÃO alunos
+                case CONSTS.OPT_ALUNOS:
+                    target_tbl = database["tbl_alunos"]
+                    break
 
-                tbl_destino = database["tbl_alunos"]
+                # OPÇÃO professores
+                case CONSTS.OPT_PROFESSORES:
+                    target_tbl = database["tbl_professores"]
+                    break
 
-                break
+                # OPÇÃO disciplinas
+                case CONSTS.OPT_DISCIPLINAS:
+                    target_tbl = database["tbl_disciplinas"]
+                    break
 
-            # OPÇÃO professores
-            elif opcao_menu_principal == '2':
+                # OPÇÃO turmas
+                case CONSTS.OPT_TURMAS:
+                    target_tbl = database["tbl_turmas"]
+                    break
 
-                tbl_destino = database["tbl_professores"]
+                # OPÇÃO matriculas
+                case CONSTS.OPT_MATRICULAS:
+                    target_tbl = database["tbl_matriculas"]
+                    break
 
-                break
+                # CASO O USUÁRIO DIGITE OPÇÃO SAIR
+                case '9' | 'q' | 'Q':
+                    running = False
+                    break
 
-            # OPÇÃO disciplinas
-            elif opcao_menu_principal == "3":
+                # CASO O USUÁRIO DIGITE OPÇÃO INVALIDA
+                case _:
+                    msg_opcao_invalida()
 
-                tbl_destino = database["tbl_disciplinas"]
+            #  fim match case  menu
 
-                break
+        #  fim while menu principal
 
-            # OPÇÃO turmas
-            elif opcao_menu_principal == "4":
-
-                tbl_destino = database["tbl_turmas"]
-
-                break
-
-            # OPÇÃO matriculas
-            elif opcao_menu_principal == "5":
-
-                tbl_destino = database["tbl_matriculas"]
-
-                break
-
-            # CASO O USUÁRIO DIGITE OPÇÃO SAIR
-            elif opcao_menu_principal == '9' or opcao_menu_principal == 'q':
-                msg_saida()
-
-                for tbl in database.values():
-
-                    salvar_em_arquivo(tbl["data"], tbl["name"])
-
-                # salvar_em_arquivo(database["tbl_alunos"]["data"], "alunos")
-                # salvar_em_arquivo(database["tbl_professores"]["data"], "professores")
-                running = False
-
-            # CASO O USUÁRIO DIGITE OPÇÃO INVALIDA
-            else:
-                msg_opcao_invalida()
-
-        #  Loop no menu secundário. Roda enquanto não receber um BREAK
+        #  Loop no menu secundário.
         while running:
 
-            nome_destino = tbl_destino["name"]
-            chaves_destino = tbl_destino["keys"]
-            data_destino = tbl_destino["data"]
+            sucess_flag = False
 
-            desenha_submenu(nome_destino.upper())
+            target_name = target_tbl["name"]
+            target_dataset = target_tbl["data"]
 
-            opcao_submenu1 = input("\t Informe o número da opção desejada: ")
+            show_menu_crud(target_name.upper())
 
-            match opcao_submenu1:
-                case "1":  # Opção de INCLUIR
+            option_menu_crud = input("\t Informe o número da opção desejada: ")
 
-                    inserir_novo_item(tbl_destino)
+            match option_menu_crud:
+                case CONSTS.OPT_CREATE:  # Opção de INCLUIR
+                    sucess_flag = create_item(database, target_name)
 
-                    salvar_em_arquivo(data_destino, nome_destino)
+                case CONSTS.OPT_READ:  # Opção de LISTAR
+                    list_itens(target_tbl)
 
-                    msg_enter_continua()
+                case CONSTS.OPT_UPDATE:  # Opção de EDITAR
+                    sucess_flag = update_item(database, target_name)
 
-                case "2":  # Opção de LISTAR
-                    print("\t RELAÇÃO DOS %s CADASTRADOS" % nome_destino)
+                case CONSTS.OPT_DELETE:  # Opção de EXCLUIR
+                    sucess_flag = delete_item(target_dataset)
 
-                    listar_itens(data_destino)
-
-                    msg_enter_continua()
-
-                case "3":  # Opção de EDITAR
-
-                    editar_item(data_destino)
-
-                    salvar_em_arquivo(data_destino, nome_destino)
-
-                    msg_enter_continua()
-
-                case "4":  # Opção de EXCLUIR
-
-                    excluir_item(data_destino)
-
-                    salvar_em_arquivo(data_destino, nome_destino)
-
-                    msg_enter_continua()
-
-                case "9" | "q":  # Opção de SAIR
+                case '9' | 'q' | 'Q':  # Opção de SAIR
                     print("Voltando ao menu principal")
                     break
 
                 case _:  # CASO O USUÁRIO DIGITE OPÇÃO INVALIDA
                     msg_opcao_invalida()
+
+            #  fim match case submenu
+            if sucess_flag:
+                save_tbl_to_file(target_tbl)
+
+            msg_enter_continua()
+
+        #  fim while submenu
+
+    # fim while aplicação
+
+    # procedimentos para encerramento da aplicação
+
+    # salvar database em arquivos
+    save_database(database)
+
+    # exibir a mensagem final
+    msg_saida()
 
     return 0
 
@@ -623,10 +824,16 @@ def main() -> int:
 # INICIO DO PROGRAMA
 if __name__ == "__main__":
 
-    print("Iniciando o programa... ")
+    print("Iniciando aplicação... ")
+    # descrição da linha de comando da aplicação
+    parse = argparse.ArgumentParser(description="no modo depuração a tela não é limpa e todas mensagems permanecem")
 
-    main()
+    # adicionar possíveis argumentos
+    parse.add_argument('-d', "--debug", action="store_true", help="Ativa o modo de debug")
+    args = parse.parse_args()
 
-    print("Programa finalizado... ")
+    final_status = main(args.debug)
 
-    exit(0)
+    print("Encerrando aplicação... ")
+
+    exit(final_status)
