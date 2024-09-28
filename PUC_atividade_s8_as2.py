@@ -77,6 +77,10 @@ class SETTINGS:
         "matriculas": ("codigo", "turma_id", "aluno_id")
     }
 
+    FILEFORMAT = ".json"
+    FILEPREFIX = "jayzon_"
+    FILEPATH = "datafiles"
+
 
 # ESTRUTURA/CLASS COM AS CONSTANTES UTILIZADAS NA APLICAÇÃO
 class CONSTS:
@@ -259,54 +263,81 @@ def msg_enter_continua() -> None:
 
 
 # DEFINIÇÃO DAS FUNÇÕES
-def save_tbl_to_file(tbl_param) -> bool:
+def validade_pathfile(pathfile_param):
+    valid_pathfile = pathfile_param + "/"
+
+    if not os.path.exists(pathfile_param):
+        print(f"Criando diretorio de arquivos...", end="")
+        try:
+            os.makedirs(pathfile_param)
+            print("diretorio criado com sucesso.")
+        except Exception as erro:
+            print(f" {type(erro).__name__} [ Utilizando Diretorio-padrão ]")
+            valid_pathfile = ""
+
+    return valid_pathfile
+
+
+def save_tbl_to_file(tbl_param: dict) -> bool:
     """
     Função para salvar os dados em um arquivo JSON
     Recebe o dicionário com a tabela com os dados.
     Retorna true se tudo certo.
     """
 
-    filename = tbl_param["name"] or "itens"
+    filepath = validade_pathfile(SETTINGS.FILEPATH)
+
+    tbl_name = tbl_param["name"] or "itens"
+
+    filename = filepath + SETTINGS.FILEPREFIX + tbl_name + SETTINGS.FILEFORMAT
+
+    # verifica se o diretório existe, se não cria para não haver erros
+
     dataset = tbl_param["data"]
 
-    print(f"\t Salvando dados de: {filename:.<15}", end=' ')
+    print(f"\t Salvando os dados de {filename:.<15}", end=' ')
 
     try:
-        with open("jayzon_" + filename + ".json", "w", encoding='utf8') as arquivo_escrita:
-            json.dump(dataset, arquivo_escrita, indent=4, ensure_ascii=False)
+        with open(filename, "w", encoding='utf8') as file_opened:
+            json.dump(dataset, file_opened, indent=4, ensure_ascii=False)
             print("[Dados salvo com sucesso] ")
 
     except Exception as erro:
-        print(f"*** Erro inesperado  :{erro} ***   ")
-        print(f"*** os dados não foram salvos ***  ")
+        print(f"*** {type(erro).__name__} ***   ")
+        print(f"*** os dados não foram salvos !! ***  ")
         print("")
         return False
 
     return True
 
 
-def load_tbl_from_file(filename_param="itens", keyset_param=("codigo", "nome", "cpf")) -> dict:
+def load_tbl_from_file(tblname_param="itens", keyset_param=("codigo", "nome", "cpf")) -> dict:
     """
     Função para abrir arquivo json
     Recebe o nome do arquivo com os dados
     Retorna dicionario com os dados
     """
 
-    print(f"\t Carregando base de dados: {filename_param:.<15}", end=' ')
+    # verifica se o diretório existe, se não cria para não haver erros
+    filepath = validade_pathfile(SETTINGS.FILEPATH)
+
+    filename = filepath + SETTINGS.FILEPREFIX + tblname_param + SETTINGS.FILEFORMAT
+
+    print(f"\t Carregando a base de dados {tblname_param:.<15}", end=' ')
 
     # tenta abrir o arquivo de base de dados
     try:
-        with open("jayzon_" + filename_param + ".json", "r", encoding='utf8') as arquivo_leitura:
-            dataset = json.load(arquivo_leitura)
+        with open(filename, "r", encoding='utf8') as file_opened:
+            dataset = json.load(file_opened)
             print("[Dados carregados] ")
 
     # em caso de erro cria um dicionário com dados de teste
     except Exception as erro:
-        print(f"[ {erro} ] Carregando dados de teste ....")
-        dataset = get_default_dataset(filename_param, keyset_param)
+        print(f"{type(erro).__name__} : [ Carregando dados de teste ] ")
+        dataset = get_default_dataset(tblname_param, keyset_param)
 
     tbl_return = {
-        "name": filename_param,
+        "name": tblname_param,
         "keys": keyset_param,
         "data": dataset
     }
